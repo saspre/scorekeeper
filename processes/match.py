@@ -2,9 +2,15 @@
 
 #Proccess for management of current match
 
-import threading
+import processes.sk_threading
 
-class Match (threading.Thread)
+class Match (processes.sk_threading.Thread):
 
-	def run(self):
-		print('Match Started')
+	def __init__(self):
+		super().__init__("match")
+
+	def sk_run(self):
+		print('Match Started, waiting for input:');
+		message = self.socket.recv()
+		print("Message received: %s" % message)	
+
