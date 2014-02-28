@@ -6,10 +6,10 @@ import threading, zmq
 from model.matches import Match
 
 
-class GameProcess (threading.Thread):
+class MatchProcess (threading.Thread):
 
     def __init__(self, name, context=None):
-        super(GameProcess, self).__init__()
+        super(MatchProcess, self).__init__()
         
         self.is_active = False;
         self.match = Match()
@@ -51,12 +51,18 @@ class GameProcess (threading.Thread):
             self.team_scored("a");
         elif message["header"] == "b_scored":
             self.team_scored("b");
+        elif message["header"] == "end_match":
+            self.end_match();
         else:
             print("We received something, but we are unsure what it is")
 
     def start_match(self):
         self.is_active = True;
         self.match = Match();
+
+    def end_match(self):
+        self.is_active = False;
+        #Save to
 
     def team_scored(self, team):
         print("Some scored it was team: " + team)

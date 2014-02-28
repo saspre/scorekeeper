@@ -2,7 +2,7 @@
 #main launcher
 #import model.matches;
 
-from processes.match import GameProcess
+from processes.match import MatchProcess
 from processes.input import KeyInputHandler 
 
 import zmq, time
@@ -11,7 +11,7 @@ MATCH_SOCKET_ADDR = "inproc://match"
 
 class ScoreKeeper():
 
-    match = GameProcess(MATCH_SOCKET_ADDR)
+    match = MatchProcess(MATCH_SOCKET_ADDR)
     
     
     def start(self):
