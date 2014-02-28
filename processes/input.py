@@ -19,6 +19,9 @@ class KeyInputHandler (BaseProcess):
     def team_b_score_clicked(self):
         self.sock.send_json(({"header":'b_scored'}))
 
+    def end_game_clicked(self):
+        self.sock.send_json(({"header":'end_match'}))
+
 
 
 
@@ -26,7 +29,7 @@ class KeyInputHandler (BaseProcess):
     def run(self):
         try:
             while True:
-                rin = raw_input("in:")
+                rin = raw_input("")
                 for inp in list(rin):            
                     if(inp == 's'):
                         self.start_game_clicked();
@@ -34,6 +37,8 @@ class KeyInputHandler (BaseProcess):
                         self.team_a_score_clicked();
                     if(inp == 'b'):
                         self.team_b_score_clicked();
+                    if(inp == 'e'):
+                        self.end_game_clicked();
 
                     if inp == 'q':
                         #logger.info("Shutting down KeyInputHandler")
