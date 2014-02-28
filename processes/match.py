@@ -2,43 +2,68 @@
 
 #Proccess for management of current match
 
-import processes.sk_threading
-import model.matches
-
-class Match (processes.sk_threading.ZmqThread):
-
-	
-
-	def is_active():
-		return self.is_active;
-
-	def __init__(self):
-		super(Match,self).__init__("match")
-		self.is_active = False;
-		self.match = model.matches.Match()
+import threading, zmq
+from model.matches import Match
 
 
-	def sk_run(self):
-		print('Match is waiting for input:');
-		incomming = self.socket.recv_pyobj()
-		
-		if(isinstance(incomming, model.matches.Match)):
-			print("Match: received a match, starting match");
-			self.start_match(incomming);
-		elif (isinstance(incomming, str)):
-			self.team_scored(incomming);
-		else:
-			print("We received something, but we are unsure what it is")
+class GameProcess (threading.Thread):
 
-	def start_match(self, match):
-		self.is_active = True;
-		self.match = match;
+    def __init__(self, name, context=None):
+        super(GameProcess, self).__init__()
+        
+        self.is_active = False;
+        self.match = Match()
+        self.context = context or zmq.Context.instance()
+        self.sock = self.context.socket(zmq.PAIR)
+        self.sock.bind(name)
+       
 
-	def team_scored(self,team='a'):
-		print("Some scored it was team: " + team)
-		if(team == 'a'):
-			self.match.score_a += 1
-		else:
-			self.match.score_b += 1
 
-		print("Score is now: %s - %s" % (self.match.score_a  ,self.match.score_b))
+    def run(self):
+        while True:
+            try:
+                message = self.sock.recv_json()
+
+            except zmq.error.ContextTerminated:
+                break;
+            if message["header"] == "stop":
+                break;
+            elif message['header'] == "echo":
+                self.sock.send_json({'header':'respond_echo'})
+            else:
+                self.processMessage(message);
+
+
+
+
+    def is_active(self):
+        return self.is_active;
+
+
+    def processMessage(self,message):
+        print('Match is waiting for input:');
+        
+        
+        if message["header"] == "start_match":
+            print("Match: received a match, starting match");
+            self.start_match();
+        elif message["header"] == "a_scored":
+            self.team_scored("a");
+        elif message["header"] == "b_scored":
+            self.team_scored("b");
+        else:
+            print("We received something, but we are unsure what it is")
+
+    def start_match(self):
+        self.is_active = True;
+        self.match = Match();
+
+    def team_scored(self, team):
+        print("Some scored it was team: " + team)
+        if team == 'a':
+            self.match.score_a += 1
+        elif team == 'b':
+            self.match.score_b += 1
+        else:
+            print ("Who the hell scored")
+        print("Score is now: %s - %s" % (self.match.score_a  ,self.match.score_b))
