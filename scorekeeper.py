@@ -2,19 +2,21 @@
 #main launcher
 #import model.matches;
 
-import processes.match
-import buttons
+from processes.match import GameProcess
+from processes.input import KeyInputHandler 
 
 import zmq, time
 
+MATCH_SOCKET_ADDR = "inproc://match"
 
+class ScoreKeeper():
 
-class ScoreKeeper:
-
-	match = processes.match.Match();
-
-	def start(self):
-		self.match.start();
+    match = GameProcess(MATCH_SOCKET_ADDR)
+    
+    
+    def start(self):
+        self.match.start();
+        KeyInputHandler(MATCH_SOCKET_ADDR).start()
 
 
 
@@ -23,7 +25,7 @@ scorekeeper.start();
 
 
 
-		
+        
 ### Example of socket communication to match process
 #context = zmq.Context.instance()
 #socket = context.socket(zmq.PUSH)
@@ -31,14 +33,3 @@ scorekeeper.start();
 #socket.send_pyobj("Hello")
 
 
-
-#### input simulation
-
-while True:
-	inp = input()
-	if(inp == 's'):
-		buttons.start_game_clicked();
-	if(inp == 'a'):
-		buttons.team_a_score_clicked();
-	if(inp == 'b'):
-		buttons.team_b_score_clicked();
