@@ -41,11 +41,7 @@ class MatchProcess (threading.Thread):
 
 
     def processMessage(self,message):
-        print('Match is waiting for input:');
-        
-        
         if message["header"] == "start_match":
-            print("Match: received a match, starting match");
             self.start_match();
         elif message["header"] == "a_scored":
             self.team_scored("a");
@@ -55,17 +51,23 @@ class MatchProcess (threading.Thread):
             self.end_match();
         else:
             print("We received something, but we are unsure what it is")
+        print('Match is waiting for input:');
 
     def start_match(self):
         if self.is_active:
             print ("Unable to start match, already in progress!")
             return
+        print("Match: received a match, starting match");
         self.is_active = True;
         self.match = Match();
 
     def end_match(self):
+        if not self.is_active:
+            print ("Unable to end match, no match in progress!")
+            return
+        print ("Ending match and saving the results           (psst.. we are not really saving them)")
         self.is_active = False;
-        #Save to
+        #Save to DB
 
     def team_scored(self, team):
         if not self.is_active:

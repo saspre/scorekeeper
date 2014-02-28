@@ -29,7 +29,7 @@ class KeyInputHandler (BaseProcess):
     def run(self):
         try:
             while True:
-                rin = raw_input("in:")
+                rin = raw_input("")
                 for inp in list(rin):            
                     if(inp == 's'):
                         self.start_game_clicked();
