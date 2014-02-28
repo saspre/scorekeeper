@@ -13,7 +13,7 @@ class Match (processes.sk_threading.ZmqThread):
 		return self.is_active;
 
 	def __init__(self):
-		super().__init__("match")
+		super(Match,self).__init__("match")
 		self.is_active = False;
 		self.match = model.matches.Match()
 
