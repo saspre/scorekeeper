@@ -57,6 +57,9 @@ class MatchProcess (threading.Thread):
             print("We received something, but we are unsure what it is")
 
     def start_match(self):
+        if self.is_active:
+            print ("Unable to start match, already in progress!")
+            return
         self.is_active = True;
         self.match = Match();
 
@@ -65,6 +68,9 @@ class MatchProcess (threading.Thread):
         #Save to
 
     def team_scored(self, team):
+        if not self.is_active:
+            print ("No match in progress!")
+            return
         print("Some scored it was team: " + team)
         if team == 'a':
             self.match.score_a += 1
