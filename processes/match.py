@@ -32,7 +32,7 @@ class MatchProcess (threading.Thread):
                 print("Received Key interrupt. Exiting")
                 break
             try:
-                message = self.inputSocket.recv_json()
+                message = self.displaySocket.recv_json()
 
             except zmq.error.ContextTerminated:
                 break;

@@ -81,6 +81,9 @@ Rectangle {
             y: 0
             width: 126
             height: 46
+            onClicked: {
+                qScoreInterface.aScored()
+            }
         }
     }
 
@@ -93,7 +96,7 @@ Rectangle {
         color: "#4e3a3a"
         radius: 10
         TextInput {
-            id: team_b_txt1
+            id: team_b_txt
             x: 24
             y: 13
             width: 80
@@ -104,8 +107,39 @@ Rectangle {
         }
 
         MouseArea {
-            id: team_b_score_ma1
+            id: team_b_score_ma
             x: 0
+            y: 0
+            width: 126
+            height: 46
+            onClicked: {
+                qScoreInterface.bScored()
+            }
+        }
+    }
+
+    Rectangle {
+        id: startstopgame
+        x: 177
+        y: 113
+        width: 127
+        height: 46
+        color: "#4e3a3a"
+        radius: 10
+        TextInput {
+            id: startstopgame_txt
+            x: 24
+            y: 13
+            width: 80
+            height: 20
+            text: qsTr("Start Game")
+            horizontalAlignment: TextInput.AlignHCenter
+            font.pixelSize: 12
+        }
+
+        MouseArea {
+            id: team_b_score_ma2
+            x: 1
             y: 0
             width: 126
             height: 46

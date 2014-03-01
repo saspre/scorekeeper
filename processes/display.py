@@ -15,10 +15,17 @@ class QtScoreInterface(QtCore.QObject ):
     @QtCore.Slot()
     def aScored(self):
         print ("A_scored");
+        self.socket.send_json({"header":"a_scored"})
 
     @QtCore.Slot()
     def bScored(self):
         print ("B_scored");
+        self.socket.send_json({"header":"b_scored"})
+
+    @QtCore.Slot()
+    def startMatch(self):
+        print ("Game start stopped");
+        self.socket.send_json({"header":"start_match"})
 
 
 class MainWindow( QtDeclarative.QDeclarativeView ):
