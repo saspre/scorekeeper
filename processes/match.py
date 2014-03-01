@@ -4,32 +4,43 @@
 
 import threading, zmq
 from model.matches import Match
+from addresses import *
 
 
 class MatchProcess (threading.Thread):
 
-    def __init__(self, name, context=None):
+    def __init__(self, context=None):
         super(MatchProcess, self).__init__()
         
         self.is_active = False;
         self.match = Match()
         self.context = context or zmq.Context.instance()
-        self.sock = self.context.socket(zmq.PAIR)
-        self.sock.bind(name)
+        self.inputSocket = self.context.socket(zmq.PAIR)
+        self.inputSocket.bind(getInputSocketAddr())
+        self.displaySocket = self.context.socket(zmq.PAIR)
+        self.displaySocket.bind(getDisplaySocketAddr())
+        self.poller = zmq.Poller()
        
 
 
     def run(self):
         while True:
             try:
-                message = self.sock.recv_json()
+                poller_socks = dict(self.poller.poll(2))
+                
+            except KeyboardInterrupt:
+                print("Received Key interrupt. Exiting")
+                break
+            try:
+                message = self.inputSocket.recv_json()
 
             except zmq.error.ContextTerminated:
                 break;
             if message["header"] == "stop":
+                self.displaySocket.send_json({"header":"stop"})
                 break;
             elif message['header'] == "echo":
-                self.sock.send_json({'header':'respond_echo'})
+                self.inputSocket.send_json({'header':'respond_echo'})
             else:
                 self.processMessage(message);
 

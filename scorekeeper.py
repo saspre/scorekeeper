@@ -4,19 +4,27 @@
 
 from processes.match import MatchProcess
 from processes.input import KeyInputHandler 
+from processes.display import DisplayProcess, MainWindow
+from PySide import QtCore,QtDeclarative, QtGui
+import zmq, time, sys
 
-import zmq, time
-
-MATCH_SOCKET_ADDR = "inproc://match"
+from addresses import *
 
 class ScoreKeeper():
 
-    match = MatchProcess(MATCH_SOCKET_ADDR)
+    match = MatchProcess()
     
     
     def start(self):
         self.match.start();
-        KeyInputHandler(MATCH_SOCKET_ADDR).start()
+        KeyInputHandler(getInputSocketAddr()).start()
+        app = QtGui.QApplication( sys.argv )
+        window = MainWindow()
+        DisplayProcess(getDisplaySocketAddr(),app=app, window=window).start()
+        window.show()
+       
+        
+        sys.exit( app.exec_() )
 
 
 
