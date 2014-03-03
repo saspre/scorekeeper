@@ -16,16 +16,15 @@ class ScoreKeeper():
     
     def start(self):
         self.match.start();
+
+        # Start Key Input Listener (Possible Mock RFID reader)
         KeyInputHandler(getInputSocketAddr()).start()
-        app = QtGui.QApplication( sys.argv )
-        window = MainView()
-        DisplayProcess(getDisplaySocketAddr(),app=app, window=window).start()
-        window.show()
-       
+      
+        displayProcess = DisplayProcess(getDisplaySocketAddr())       
+        displayProcess.start() 
         
-        sys.exit( app.exec_() )
-
-
+        sys.exit( displayProcess.qApplication.exec_() ) ## Must be run from main thread
+        
 
 scorekeeper = ScoreKeeper();
 scorekeeper.start();
