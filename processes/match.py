@@ -3,7 +3,7 @@
 #Proccess for management of current match
 
 import threading, zmq
-from models import Match, Session, Player, Team, Base, engine
+from models import Match, Session, Player, Team, Base, initSchema
 from sqlalchemy.orm import sessionmaker
 from addresses import *
 
@@ -116,7 +116,6 @@ class MatchProcess (threading.Thread):
 
     def new_player(self, name):
         self.session.add(Player(name = name))
-        Base.metadata.create_all(bind=engine)
         self.session.commit()
 
 

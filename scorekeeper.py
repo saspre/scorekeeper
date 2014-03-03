@@ -6,6 +6,7 @@ from processes.display import DisplayProcess, MainView
 from PySide import QtCore,QtDeclarative, QtGui
 import zmq, time, sys
 from addresses import *
+from models import initSchema,initData
 
 
 
@@ -15,6 +16,8 @@ class ScoreKeeper():
     
     
     def start(self):
+        #initSchema()
+        #initData()
         self.match.start();
 
         # Start Key Input Listener (Possible Mock RFID reader)
