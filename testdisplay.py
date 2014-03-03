@@ -48,10 +48,10 @@ if __name__ == '__main__':
 # - * - Coding: utf-8 - * -
 import sys
 from  PySide  import  QtGui ,  QtCore
-class  MainWindow ( QtGui . QMainWindow ):
+class  MainView ( QtGui . QMainWindow ):
 
     def __init__(self , Parent = None ):
-        super ( MainWindow ,  self ). __init__ ( Parent )
+        super ( MainView ,  self ). __init__ ( Parent )
         self . setWindowTitle ( 'StackedWidget' )
         self . resize ( 800 ,  600 )
         # I want to create three widgets to switch
@@ -96,7 +96,7 @@ class  MainWindow ( QtGui . QMainWindow ):
 
 if __name__ ==  '__main__' :
     app =  QtGui . QApplication ( sys . argv )
-    Main_window =  MainWindow ()
+    Main_window =  MainView ()
     Main_window . show ()
     sys . exit ( app . exec_())
 

@@ -12,6 +12,10 @@ class QtScoreInterface(QtCore.QObject ):
         QtCore.QObject.__init__(self)
         self.socket = socket
 
+
+    signaller_score_a = QtCore.Signal(str)
+    signaller_score_b = QtCore.Signal(str)
+
     @QtCore.Slot()
     def aScored(self):
         print ("A_scored");
@@ -26,11 +30,16 @@ class QtScoreInterface(QtCore.QObject ):
     def startMatch(self):
         print ("Game start stopped");
         self.socket.send_json({"header":"start_match"})
+       
+
+    def updateScore(self, a, b):
+        self.signaller_score_a.emit(str(a))
+        self.signaller_score_b.emit(str(b))
 
 
-class MainWindow( QtDeclarative.QDeclarativeView ):
+class MainView( QtDeclarative.QDeclarativeView ):
     def __init__( self, parent=None):
-        super( MainWindow, self ).__init__( parent )
+        super( MainView, self ).__init__( parent )
         self.setWindowTitle( "Test" )
         self.setSource( QtCore.QUrl.fromLocalFile( './interface/main.qml' ) )
         self.setResizeMode( QtDeclarative.QDeclarativeView.SizeRootObjectToView )
@@ -40,14 +49,25 @@ class DisplayProcess(BaseProcess):
 
     def __init__(self, name, context=None, app=None, window=None):
         super(DisplayProcess, self).__init__(name,context)
-        self.app = app
-        self.window = window
-        self.qcontext = self.window.rootContext()
-        self.qcontext.setContextProperty("qScoreInterface",QtScoreInterface(self.sock))
+        #http://pyqt.sourceforge.net/Docs/PyQt4/qml.html
+        #http://stackoverflow.com/questions/10506398/pyside-signal-argument-cant-be-retrieved-from-qml
 
-    def run(self):
-        
+        self.app = app
+        self.window = window 
+        self.qcontext = self.window.rootContext() #is this needed?
+        self.interface = QtScoreInterface(self.sock)
+        self.qcontext.setContextProperty("qScoreInterface",self.interface)
+     
+        self.interface.signaller_score_a.connect(self.window.rootObject().updateScoreA)
+        self.interface.signaller_score_b.connect(self.window.rootObject().updateScoreB)
+
+
+    def run(self): 
         super(DisplayProcess,self).run();
     
-    def processMessage(self):
-        pass # Ignore so far
+    def processMessage(self, msg):
+        if msg["header"] == "score_update":
+            self.interface.updateScore(
+                a=msg["data"]["a"],
+                b=msg["data"]["b"]
+                )

@@ -4,6 +4,9 @@ Rectangle {
     id: rectangle1
     width: 480
     height: 272
+
+
+
     gradient: Gradient {
         GradientStop {
             id: gradientStop1
@@ -15,6 +18,14 @@ Rectangle {
             position: 1
             color: "#abc09f"
         }
+    }
+
+    function updateScoreA(string ) {
+        score_a.text = string
+    }
+
+    function updateScoreB(string ) {
+        score_b.text = string
     }
 
     Text {
@@ -38,6 +49,10 @@ Rectangle {
         verticalAlignment: Text.AlignVCenter
         horizontalAlignment: Text.AlignRight
         font.pixelSize: 12
+
+
+        
+      
     }
 
     Text {

@@ -4,7 +4,7 @@
 
 from processes.match import MatchProcess
 from processes.input import KeyInputHandler 
-from processes.display import DisplayProcess, MainWindow
+from processes.display import DisplayProcess, MainView
 from PySide import QtCore,QtDeclarative, QtGui
 import zmq, time, sys
 
@@ -19,7 +19,7 @@ class ScoreKeeper():
         self.match.start();
         KeyInputHandler(getInputSocketAddr()).start()
         app = QtGui.QApplication( sys.argv )
-        window = MainWindow()
+        window = MainView()
         DisplayProcess(getDisplaySocketAddr(),app=app, window=window).start()
         window.show()
        

@@ -92,3 +92,12 @@ class MatchProcess (threading.Thread):
         else:
             print ("Who the hell scored")
         print("Score is now: %s - %s" % (self.match.score_a  ,self.match.score_b))
+
+
+        # Broadcast to display
+        self.displaySocket.send_json(
+            {"header":"score_update", 
+            "data":{"a":self.match.score_a,
+            "b":self.match.score_b}}
+            )
+        
