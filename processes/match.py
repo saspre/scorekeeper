@@ -5,32 +5,45 @@
 import threading, zmq
 from models import Match, Session, Player, Team, Base, engine
 from sqlalchemy.orm import sessionmaker
+from addresses import *
 
 
 class MatchProcess (threading.Thread):
 
-    def __init__(self, name, context=None):
+    def __init__(self, context=None):
         super(MatchProcess, self).__init__()
         
         self.is_active = False;
         self.match = Match()
         self.context = context or zmq.Context.instance()
-        self.sock = self.context.socket(zmq.PAIR)
-        self.sock.bind(name)
 
         self.session = Session()
 
+        self.inputSocket = self.context.socket(zmq.PAIR)
+        self.inputSocket.bind(getInputSocketAddr())
+        self.displaySocket = self.context.socket(zmq.PAIR)
+        self.displaySocket.bind(getDisplaySocketAddr())
+        self.poller = zmq.Poller()
+       
 
     def run(self):
         while True:
             try:
-                message = self.sock.recv_json()
+                poller_socks = dict(self.poller.poll(2))
+            except KeyboardInterrupt:
+                print("Received Key interrupt. Exiting")
+                break
+
+            try:
+                message = self.displaySocket.recv_json()
             except zmq.error.ContextTerminated:
                 break;
+
             if message["header"] == "stop":
+                self.displaySocket.send_json({"header":"stop"})
                 break;
             elif message['header'] == "echo":
-                self.sock.send_json({'header':'respond_echo'})
+                self.inputSocket.send_json({'header':'respond_echo'})
             else:
                 self.processMessage(message);
 
@@ -93,6 +106,12 @@ class MatchProcess (threading.Thread):
         else:
             print ("Who the hell scored")
         print("Score is now: %s - %s" % (self.match.score_a  ,self.match.score_b))
+        # Broadcast to display
+        self.displaySocket.send_json(
+            {"header":"score_update", 
+            "data":{"a":self.match.score_a,
+            "b":self.match.score_b}}
+            )
 
 
     def new_player(self, name):
@@ -112,3 +131,4 @@ class MatchProcess (threading.Thread):
         for player in players:
             team.players.append(player)
         self.session.commit()
+

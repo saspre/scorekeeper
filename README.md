@@ -6,7 +6,7 @@ Score Keeper
 
 
 ZMQ
-=====
+===
 
 sudo pacman -S python-pip
 sudo pip install pyzmq

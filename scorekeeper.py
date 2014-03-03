@@ -3,21 +3,28 @@
 from processes.match import MatchProcess
 from processes.input import KeyInputHandler 
 import database
+from processes.display import DisplayProcess, MainView
+import zmq, time, sys
 
-import zmq, time
-
-MATCH_SOCKET_ADDR = "inproc://match"
+from addresses import *
 
 database.initDatabase()
 
 class ScoreKeeper():
 
-    match = MatchProcess(MATCH_SOCKET_ADDR)
+    match = MatchProcess()
     
     
     def start(self):
         self.match.start();
-        KeyInputHandler(MATCH_SOCKET_ADDR).start()
+        KeyInputHandler(getInputSocketAddr()).start()
+        app = QtGui.QApplication( sys.argv )
+        window = MainView()
+        DisplayProcess(getDisplaySocketAddr(),app=app, window=window).start()
+        window.show()
+       
+        
+        sys.exit( app.exec_() )
 
 
 

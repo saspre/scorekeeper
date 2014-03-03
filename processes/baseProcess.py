@@ -25,7 +25,7 @@ class BaseProcess(threading.Thread):
             except zmq.error.ContextTerminated:
                 break;
             if message['header'] == "stop":
-                break;
+                return;
             elif message['header'] == "echo":
                 self.sock.send_json({'header':'respond_echo'})
             else:
