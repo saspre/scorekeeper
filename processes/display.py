@@ -47,13 +47,15 @@ class MainView( QtDeclarative.QDeclarativeView ):
 
 class DisplayProcess(BaseProcess):
 
-    def __init__(self, name, context=None, app=None, window=None):
+    def __init__(self, name, context=None):
         super(DisplayProcess, self).__init__(name,context)
         #http://pyqt.sourceforge.net/Docs/PyQt4/qml.html
         #http://stackoverflow.com/questions/10506398/pyside-signal-argument-cant-be-retrieved-from-qml
 
-        self.app = app
-        self.window = window 
+        self.qApplication = QtGui.QApplication( sys.argv )
+        self.window = MainView()
+        self.window.show();
+        
         self.qcontext = self.window.rootContext() #is this needed?
         self.interface = QtScoreInterface(self.sock)
         self.qcontext.setContextProperty("qScoreInterface",self.interface)
@@ -65,6 +67,8 @@ class DisplayProcess(BaseProcess):
     def run(self): 
         super(DisplayProcess,self).run();
     
+
+
     def processMessage(self, msg):
         if msg["header"] == "score_update":
             self.interface.updateScore(
