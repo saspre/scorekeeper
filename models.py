@@ -6,8 +6,9 @@ from sqlalchemy import create_engine, Column, Integer, String, Sequence, Table, 
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship, backref
 from model.base import Base
+import config
 
-engine = create_engine("sqlite:///:memory:",echo=False)
+engine = create_engine(config.configSectionMap('database')['name'],echo=False)
 Session = sessionmaker(bind=engine)
 
 player_team = Table('player_team',Base.metadata,

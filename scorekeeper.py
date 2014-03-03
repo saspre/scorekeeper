@@ -2,13 +2,12 @@
 #main launcher
 from processes.match import MatchProcess
 from processes.input import KeyInputHandler 
-import database
 from processes.display import DisplayProcess, MainView
+from PySide import QtCore,QtDeclarative, QtGui
 import zmq, time, sys
-
 from addresses import *
 
-database.initDatabase()
+
 
 class ScoreKeeper():
 
