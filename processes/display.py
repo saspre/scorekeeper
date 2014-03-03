@@ -37,12 +37,13 @@ class QtScoreInterface(QtCore.QObject ):
 
 
 class MainView( QtDeclarative.QDeclarativeView ):
-    def __init__( self, parent=None):
+    def __init__( self, parent=None, fullscreen=False):
         super( MainView, self ).__init__( parent )
-        self.setWindowTitle( "Test" )
+        self.setWindowTitle( "ScoreKeeper" )
         self.setSource( QtCore.QUrl.fromLocalFile( './interface/main.qml' ) )
         self.setResizeMode( QtDeclarative.QDeclarativeView.SizeRootObjectToView )
-       
+        if fullscreen:
+            self.showFullScreen()
 
 class DisplayProcess(BaseProcess):
 
