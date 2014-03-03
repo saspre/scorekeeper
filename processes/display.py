@@ -8,14 +8,14 @@ from processes.baseProcess import BaseProcess
 
 
 class QtScoreInterface(QtCore.QObject ):
-    def __init__(self, socket):
-        QtCore.QObject.__init__(self)
-        self.socket = socket
-
 
     signaller_score_a = QtCore.Signal(str)
     signaller_score_b = QtCore.Signal(str)
 
+    def __init__(self, socket):
+        QtCore.QObject.__init__(self)
+        self.socket = socket
+  
     @QtCore.Slot()
     def aScored(self):
         print ("A_scored");
@@ -31,7 +31,6 @@ class QtScoreInterface(QtCore.QObject ):
         print ("Game start stopped");
         self.socket.send_json({"header":"start_match"})
        
-
     def updateScore(self, a, b):
         self.signaller_score_a.emit(str(a))
         self.signaller_score_b.emit(str(b))
@@ -66,7 +65,6 @@ class DisplayProcess(BaseProcess):
 
     def run(self): 
         super(DisplayProcess,self).run();
-    
 
 
     def processMessage(self, msg):
