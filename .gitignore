@@ -39,3 +39,4 @@ nosetests.xml
 buttons
 *sublime*
 *.autosave
+database.db

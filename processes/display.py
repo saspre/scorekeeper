@@ -30,8 +30,8 @@ class QtScoreInterface(QtCore.QObject ):
 
     @QtCore.Slot()
     def startMatch(self):
-        print ("Game start stopped");
-        self.socket.send_json({"header":"start_match"})
+        print ("Match start");
+        self.socket.send_json({"header":"start_match","data":{"team_a":"RasmusAlex","team_b":"KimSimon"}})
        
     def updateScore(self, a, b):
         self.signaller_score_a.emit(str(a))

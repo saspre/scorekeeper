@@ -1,14 +1,14 @@
 #!/usr/bin/python2
 #main launcher
-#import model.matches;
-
 from processes.match import MatchProcess
 from processes.input import KeyInputHandler 
 from processes.display import DisplayProcess, MainView
 from PySide import QtCore,QtDeclarative, QtGui
 import zmq, time, sys
-
 from addresses import *
+from models import initSchema,initData
+
+
 
 class ScoreKeeper():
 
@@ -16,6 +16,8 @@ class ScoreKeeper():
     
     
     def start(self):
+        #initSchema()
+        #initData()
         self.match.start();
 
         # Start Key Input Listener (Possible Mock RFID reader)
