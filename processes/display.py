@@ -15,6 +15,7 @@ class QtScoreInterface(QtCore.QObject ):
     def __init__(self, socket):
         QtCore.QObject.__init__(self)
         self.socket = socket
+   
   
     @QtCore.Slot()
     def aScored(self):
@@ -25,6 +26,7 @@ class QtScoreInterface(QtCore.QObject ):
     def bScored(self):
         print ("B_scored");
         self.socket.send_json({"header":"b_scored"})
+        #MainView().show()
 
     @QtCore.Slot()
     def startMatch(self):
@@ -39,7 +41,7 @@ class QtScoreInterface(QtCore.QObject ):
 class MainView( QtDeclarative.QDeclarativeView ):
     def __init__( self, parent=None, fullscreen=False):
         super( MainView, self ).__init__( parent )
-        self.setWindowTitle( "ScoreKeeper" )
+        self.setWindowTitle( "ScoreKeeperg" )
         self.setSource( QtCore.QUrl.fromLocalFile( './interface/main.qml' ) )
         self.setResizeMode( QtDeclarative.QDeclarativeView.SizeRootObjectToView )
         if fullscreen:
@@ -66,9 +68,10 @@ class DisplayProcess(BaseProcess):
 
     def run(self): 
         super(DisplayProcess,self).run();
-
-
+    
+    
     def processMessage(self, msg):
+        print msg
         if msg["header"] == "score_update":
             self.interface.updateScore(
                 a=msg["data"]["a"],
