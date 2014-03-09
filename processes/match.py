@@ -77,10 +77,12 @@ class MatchProcess (threading.Thread):
         if self.is_active:
             print ("Unable to start match, already in progress!")
             return
-        print("Match: received a match, starting match");
+        team_a = self.session.query(Team).filter(Team.name == teama).one()
+        team_b = self.session.query(Team).filter(Team.name == teamb).one()
+        print("Match: received a match, starting match between: "+team_a.name+" and "+team_b.name);
         self.is_active = True
-        self.match = Match( team_a = self.session.query(Team).filter(Team.name == teama).one(),score_a = 0,\
-                            team_b = self.session.query(Team).filter(Team.name == teamb).one(),score_b = 0)
+        self.match = Match( team_a = team_a, score_a = 0,\
+                            team_b = team_b, score_b = 0)
         self.session.add(self.match)
 
 
@@ -98,13 +100,15 @@ class MatchProcess (threading.Thread):
         if not self.is_active:
             print ("No match in progress!")
             return
-        print("Some scored it was team: " + team)
         if team == 'a':
+            scoring_team = self.match.team_a;
             self.match.score_a = self.match.score_a + 1
         elif team == 'b':
+            scoring_team = self.match.team_b;
             self.match.score_b = self.match.score_b + 1
         else:
             print ("Who the hell scored")
+        print("Some scored it was team: " + scoring_team.name)
         print("Score is now: %s - %s" % (self.match.score_a  ,self.match.score_b))
         # Broadcast to display
         self.displaySocket.send_json(
