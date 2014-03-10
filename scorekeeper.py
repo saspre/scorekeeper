@@ -22,7 +22,6 @@ class ScoreKeeper():
 
         # Start Key Input Listener (Possible Mock RFID reader)
         KeyInputHandler(getInputSocketAddr()).start()
-      
         displayProcess = DisplayProcess(getDisplaySocketAddr())       
         displayProcess.start() 
         
