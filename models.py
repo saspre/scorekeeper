@@ -1,17 +1,19 @@
 #models.py
 # I have collected all models into this file/module because it is easier for SQLAlchemy 
-# Feel free to split it up into more files if you can
+# Feel free to split it up into more files if you can (dare)
 
 from sqlalchemy import create_engine, Column, Integer, String, Sequence, Table, Text, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship, backref
-from sqlalchemy.ext.declarative import declarative_base
 import config
 
 Base = declarative_base()
-engine = create_engine(config.configSectionMap('database')['name'],echo=False)
+engine = create_engine(config.configSectionMap('database')['connectionstring'],echo=False)
 Session = sessionmaker(bind=engine)
 
+#################################################################################################################
+################################## Table used to connect players and to teams ###################################
+#################################################################################################################
 player_team = Table('player_team',Base.metadata,
     Column('player_id',Integer,ForeignKey('players.id')),
     Column('team_id',Integer,ForeignKey('teams.id'))
@@ -58,6 +60,9 @@ class Team(Base):
 
 def initSchema():
     Base.metadata.create_all(engine)
+
+def dropSchema():
+    Base.metadata.drop_all(engine)
 
 def initData():
     session = Session()
