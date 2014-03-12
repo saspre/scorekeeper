@@ -8,10 +8,10 @@ from sqlalchemy.orm import sessionmaker
 from addresses import *
 
 
-class MatchProcess (threading.Thread):
+class ControllerProcess (threading.Thread):
 
     def __init__(self, context=None):
-        super(MatchProcess, self).__init__()
+        super(ControllerProcess, self).__init__()
         
         self.is_active = False;
         self.match = Match()

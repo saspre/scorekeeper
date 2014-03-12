@@ -1,6 +1,6 @@
 #!/usr/bin/python2
 #main launcher
-from processes.match import MatchProcess
+from processes.controller import ControllerProcess
 from processes.input import KeyInputHandler 
 from processes.display import DisplayProcess, MainView
 from PySide import QtCore,QtDeclarative, QtGui
@@ -12,13 +12,11 @@ from models import initSchema,initData
 
 class ScoreKeeper():
 
-    match = MatchProcess()
+    controller = ControllerProcess()
     
     
     def start(self):
-        #initSchema()
-        #initData()
-        self.match.start();
+        self.controller.start();
 
         # Start Key Input Listener (Possible Mock RFID reader)
         KeyInputHandler(getInputSocketAddr()).start()
@@ -34,10 +32,10 @@ scorekeeper.start();
 
 
         
-### Example of socket communication to match process
+### Example of socket communication to controller process
 #context = zmq.Context.instance()
 #socket = context.socket(zmq.PUSH)
-#socket.connect("inproc://match")
+#socket.connect("inproc://controller")
 #socket.send_pyobj("Hello")
 
 

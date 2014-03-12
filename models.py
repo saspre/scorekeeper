@@ -61,33 +61,33 @@ def initSchema():
 def initData():
     session = Session()
 
-    #try:
-    p = [Player(name='Rasmus'),Player(name='Kim'),Player(name='Simon'),Player(name='Alex')]
-    session.add_all(p)
+    try:
+        p = [Player(name='Rasmus'),Player(name='Kim'),Player(name='Simon'),Player(name='Alex')]
+        session.add_all(p)
 
-    t = [   \
-            Team(name=p[0].name+p[1].name),\
-            Team(name=p[0].name+p[2].name),\
-            Team(name=p[0].name+p[3].name),\
-            Team(name=p[1].name+p[2].name),\
-            Team(name=p[1].name+p[3].name),\
-            Team(name=p[2].name+p[3].name) \
-        ]
-    session.add_all(t)
-    t[0].players.append(p[0])
-    t[0].players.append(p[1])
-    t[1].players.append(p[0])
-    t[1].players.append(p[2])
-    t[2].players.append(p[0])
-    t[2].players.append(p[3])
-    t[3].players.append(p[1])
-    t[3].players.append(p[2])
-    t[4].players.append(p[1])
-    t[4].players.append(p[3])
-    t[5].players.append(p[2])
-    t[5].players.append(p[3])
+        t = [   \
+                Team(name=p[0].name+p[1].name),\
+                Team(name=p[0].name+p[2].name),\
+                Team(name=p[0].name+p[3].name),\
+                Team(name=p[1].name+p[2].name),\
+                Team(name=p[1].name+p[3].name),\
+                Team(name=p[2].name+p[3].name) \
+            ]
+        session.add_all(t)
+        t[0].players.append(p[0])
+        t[0].players.append(p[1])
+        t[1].players.append(p[0])
+        t[1].players.append(p[2])
+        t[2].players.append(p[0])
+        t[2].players.append(p[3])
+        t[3].players.append(p[1])
+        t[3].players.append(p[2])
+        t[4].players.append(p[1])
+        t[4].players.append(p[3])
+        t[5].players.append(p[2])
+        t[5].players.append(p[3])
 
-    session.commit()
-    #except:
-    #    session.rollback()
-    #    raise Exception("Rolling back initialize data")
+        session.commit()
+    except:
+        session.rollback()
+        raise Exception("Rolling back initialize data")
