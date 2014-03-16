@@ -25,6 +25,7 @@ class Player(Base):
     __tablename__ = 'players'
 
     id = Column(Integer,Sequence('player_id_seq'),primary_key=True)
+    rfid = Column(String,unique=True)
     name = Column(String)
     created_at = Column(DateTime, default=func.now())
 

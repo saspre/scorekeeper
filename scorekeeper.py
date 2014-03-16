@@ -2,6 +2,7 @@
 #main launcher
 from processes.controller import ControllerProcess
 from processes.input import KeyInputHandler 
+from processes.rfidInput import RfidInput
 from processes.display import DisplayProcess, MainWindow
 from PySide import QtCore,QtDeclarative, QtGui
 import zmq, time, sys
@@ -23,7 +24,8 @@ class ScoreKeeper():
       
 
         # Start Key Input Listener (Possible Mock RFID reader)
-        inputprocess = KeyInputHandler(getInputSocketAddr())
+        #inputprocess = KeyInputHandler(getInputSocketAddr())
+        inputprocess = RfidInput(getInputSocketAddr())
         displayProcess = DisplayProcess(getDisplaySocketAddr())    
 
         self.controller.start();

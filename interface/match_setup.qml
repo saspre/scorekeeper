@@ -9,11 +9,11 @@ Rectangle {
     border.color: "black"
     
     function updateTeamA(playerIds){
-        teamatext.text = playerIds
+        teamaplayers.text = playerIds
     }
     
     function updateTeamB(playerIds){
-        teambtext.text = playerIds
+        teambplayers.text = playerIds
     }
 
     Text {
