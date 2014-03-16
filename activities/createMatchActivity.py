@@ -5,6 +5,7 @@ class CreateMatchActivity(Activity):
     teamAPlayers = []
     teamBPlayers = []
     
+    
     #def __init__(self,controller):
     #    super(CreateMatchActivity,self).__init__(controller = controller)
     #    teamAPlayers = []
@@ -58,6 +59,11 @@ class CreateMatchActivity(Activity):
             
     def loadPlayer(self,playerRfid):
         #if(self.session.query(Player).filter(Player.id == playerId).count() > 0):
-        self.teamAPlayers.append(playerRfid)
-        self.controller.sockets["display"].send_json({"header":"call_func","data":{"func":"updateTeamA","param":playerRfid}})
+        if(len(self.teamBPlayers) < len(self.teamAPlayers)):
+            self.teamBPlayers.append(playerRfid)
+            self.controller.sockets["display"].send_json({"header":"call_func","data":{"func":"updateTeamB","param":reduce(lambda x,y: x+"\n" +y,self.teamBPlayers)}})
+        else:
+            self.teamAPlayers.append(playerRfid)
+            self.controller.sockets["display"].send_json({"header":"call_func","data":{"func":"updateTeamA","param":reduce(lambda x,y: x+"\n" +y,self.teamAPlayers)}})
+        
         
