@@ -9,7 +9,7 @@ from datetime import datetime
 import config
 
 Base = declarative_base()
-engine = create_engine(config.configSectionMap('database')['connectionstring'],echo=False)
+engine = create_engine(config.Config.get("database","connectionstring"),echo=False)
 Session = sessionmaker(bind=engine)
 
 #################################################################################################################
@@ -25,6 +25,7 @@ class Player(Base):
     __tablename__ = 'players'
 
     id = Column(Integer,Sequence('player_id_seq'),primary_key=True)
+    rfid = Column(String,unique=True)
     name = Column(String)
     created_at = Column(DateTime, default=func.now())
 

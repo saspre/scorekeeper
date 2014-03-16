@@ -2,15 +2,18 @@ from activities.activity import Activity
 
 class CreateMatchActivity(Activity):
     
+    teamAPlayers = []
+    teamBPlayers = []
+    
     #def __init__(self,controller):
     #    super(CreateMatchActivity,self).__init__(controller = controller)
     #    teamAPlayers = []
     #    teamBPlayers = []
     
+    
+    
     def onCreate(self,data):
         self.setLayout("match_setup")
-        teamAPlayers = []
-        teamBPlayers = []
         
     def processDisplayMessage(self,message):
         if(message["data"]=="start_match"):
@@ -51,13 +54,13 @@ class CreateMatchActivity(Activity):
             team.players.append(player)
         self.session.commit()
         
-    def processRFIDMessage(self,message):
-        if(message["header"]=="player_id"):
+    def processRfidMessage(self,message):
+        if(message["header"]=="player_rfid"):
             self.loadPlayer(message["data"])
             
             
-    def loadPlayer(self,playerId):
+    def loadPlayer(self,playerRfid):
         #if(self.session.query(Player).filter(Player.id == playerId).count() > 0):
-        teamAPlayers.append(playerId)
-        self.controller.displaySocket.send_json({"header":"call_func","data":{"func":"updateTeamA","param":playerId}})
+        self.teamAPlayers.append(playerRfid)
+        self.controller.sockets["display"].send_json({"header":"call_func","data":{"func":"updateTeamA","param":playerRfid}})
         

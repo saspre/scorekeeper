@@ -7,7 +7,7 @@ import sys
 from PySide.QtCore import QThread, Signal, Slot, QObject
 from PySide import QtCore, QtGui, QtUiTools, QtDeclarative 
 from processes.baseProcess import BaseProcess
-
+from config import Config
 
 class MainWindow(QtGui.QMainWindow):
   
@@ -22,10 +22,10 @@ class MainWindow(QtGui.QMainWindow):
 
         self.setLayout("main")
         
-        #if config.get("GUI","fullscreen") == "true":
-        #    self.showFullScreen()
-        #else:
-        self.resize(480,272)
+        if Config.get("application","fullscreen") == "true":
+            self.showFullScreen()
+        else:
+            self.resize(480,272)
         self.displayProcess.functionSignal.connect(self.functionCall)
         self.displayProcess.layoutSignal.connect(self.setLayout)
         
