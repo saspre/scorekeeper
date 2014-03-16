@@ -64,11 +64,11 @@ Core.Interface {
     }
 
     Core.Button {
-        id: start_game
+        id: end_game
         x: 177
         y: 113
-        callId: "start_game"
-        btnText: "Start Game"
+        callId: "end_game"
+        btnText: "End Game"
     }
 
 }
