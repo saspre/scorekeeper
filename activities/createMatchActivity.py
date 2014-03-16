@@ -20,8 +20,8 @@ class CreateMatchActivity(Activity):
         if(message["data"]=="start_match"):
             print("Start Match Button Pressed")
             data = dict()
-            data["teamA"] = "teama" # mock data
-            data["teamB"] = "teamb" # TODO mock data
+            data["teamA"] = self.teamAPlayers
+            data["teamB"] = self.teamBPlayers
             self.switchActivity("MatchActivity",data)   
     
     def start_match(self,teama,teamb):
