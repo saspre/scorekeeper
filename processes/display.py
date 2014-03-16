@@ -3,75 +3,75 @@
 
 
 import sys
-from PySide import QtCore,QtDeclarative, QtGui
+
+from PySide.QtCore import QThread, Signal, Slot, QObject
+from PySide import QtCore, QtGui, QtUiTools, QtDeclarative 
 from processes.baseProcess import BaseProcess
 
 
-class QtScoreInterface(QtCore.QObject ):
-
-    signaller_score_a = QtCore.Signal(str)
-    signaller_score_b = QtCore.Signal(str)
-
-    def __init__(self, socket):
-        QtCore.QObject.__init__(self)
-        self.socket = socket
-   
+class MainWindow(QtGui.QMainWindow):
   
-    @QtCore.Slot()
-    def aScored(self):
-        self.socket.send_json({"header":"a_scored"})
 
-    @QtCore.Slot()
-    def bScored(self):
-        self.socket.send_json({"header":"b_scored"})
-        #MainView().show()
+    def __init__(self, displayProcess):
+        super(MainWindow, self).__init__(None)
+        self.context = None
+        self.displayProcess = displayProcess
+        self.centralWidget = QtGui.QStackedWidget()
+        self.setCentralWidget(self.centralWidget)
+        
 
-    @QtCore.Slot()
-    def startMatch(self):
-        print ("Match start");
-        self.socket.send_json({"header":"start_match","data":{"team_a":"RasmusAlex","team_b":"KimSimon"}})
-       
-    def updateScore(self, a, b):
-        self.signaller_score_a.emit(str(a))
-        self.signaller_score_b.emit(str(b))
+        self.setLayout("main")
+        
+        #if config.get("GUI","fullscreen") == "true":
+        #    self.showFullScreen()
+        #else:
+        self.resize(480,272)
+        self.displayProcess.functionSignal.connect(self.functionCall)
+        self.displayProcess.layoutSignal.connect(self.setLayout)
+        
+     
+    def functionCall(self, functionName, param):
+        func = eval("self.view.rootObject()." + functionName)
+        func(param)
+
+    def setLayout(self, layout):
+        
+        self.view = QtDeclarative.QDeclarativeView()
+        self.view.setSource(QtCore.QUrl.fromLocalFile( './interface/'+ layout +'.qml' ))
+        self.view.setResizeMode( QtDeclarative.QDeclarativeView.SizeRootObjectToView )   
+
+        qcontext = self.view.rootContext() 
+        qcontext.setContextProperty("context",self.displayProcess)
+ 
+        self.centralWidget.addWidget(self.view)
+        self.centralWidget.setCurrentWidget(self.view)
 
 
-class MainView( QtDeclarative.QDeclarativeView ):
-    def __init__( self, parent=None, fullscreen=False):
-        super( MainView, self ).__init__( parent )
-        self.setWindowTitle( "ScoreKeeperg" )
-        self.setSource( QtCore.QUrl.fromLocalFile( './interface/main.qml' ) )
-        self.setResizeMode( QtDeclarative.QDeclarativeView.SizeRootObjectToView )
-        if fullscreen:
-            self.showFullScreen()
+class DisplayProcess(BaseProcess, QThread, QObject):
 
-class DisplayProcess(BaseProcess):
+    layoutSignal = Signal(object)
+    functionSignal = Signal(str,str)
+
+    
 
     def __init__(self, name, context=None):
-        super(DisplayProcess, self).__init__(name,context)
-        #http://pyqt.sourceforge.net/Docs/PyQt4/qml.html
-        #http://stackoverflow.com/questions/10506398/pyside-signal-argument-cant-be-retrieved-from-qml
-
-        self.qApplication = QtGui.QApplication( sys.argv )
-        self.window = MainView()
-        self.window.show();
+        super(DisplayProcess, self).__init__(name=name, context=context)
+       
         
-        self.qcontext = self.window.rootContext() #is this needed?
-        self.interface = QtScoreInterface(self.sock)
-        self.qcontext.setContextProperty("qScoreInterface",self.interface)
-     
-        self.interface.signaller_score_a.connect(self.window.rootObject().updateScoreA)
-        self.interface.signaller_score_b.connect(self.window.rootObject().updateScoreB)
+    def processMessage(self, message):
+        if message["header"] == "set_layout":
+            self.layoutSignal.emit(message["data"])
+            return True
+        elif message["header"] == "call_func":
+            self.functionSignal.emit(message["data"]["func"],str(message["data"]["param"])) 
+            return True
+        else:
+            return False
 
+    @Slot(str)
+    def onClicked(self, btn):
+        print btn
+        message = {"header":"button_clicked","data":btn}
+        self.send(message)
+        
 
-    def run(self): 
-        super(DisplayProcess,self).run();
-    
-    
-    def processMessage(self, msg):
-        print msg
-        if msg["header"] == "score_update":
-            self.interface.updateScore(
-                a=msg["data"]["a"],
-                b=msg["data"]["b"]
-                )

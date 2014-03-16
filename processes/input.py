@@ -3,9 +3,9 @@
 
 from processes.baseProcess import BaseProcess
 
-import zmq, json
+import zmq, json, threading
 
-class KeyInputHandler (BaseProcess):
+class KeyInputHandler (BaseProcess, threading.Thread):
 
 
 

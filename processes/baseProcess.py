@@ -7,7 +7,7 @@ import threading, time
 import zmq
 
 
-class BaseProcess(threading.Thread):
+class BaseProcess(object):
 
     def __init__(self, name, context=None):
         super(BaseProcess, self).__init__()

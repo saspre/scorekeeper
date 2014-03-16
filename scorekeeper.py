@@ -2,7 +2,7 @@
 #main launcher
 from processes.controller import ControllerProcess
 from processes.input import KeyInputHandler 
-from processes.display import DisplayProcess, MainView
+from processes.display import DisplayProcess, MainWindow
 from PySide import QtCore,QtDeclarative, QtGui
 import zmq, time, sys
 from addresses import *
@@ -16,14 +16,24 @@ class ScoreKeeper():
     
     
     def start(self):
+        self.qApplication = QtGui.QApplication( sys.argv )
         self.controller.start();
 
+
+      
+
         # Start Key Input Listener (Possible Mock RFID reader)
-        KeyInputHandler(getInputSocketAddr()).start()
-        displayProcess = DisplayProcess(getDisplaySocketAddr())       
+        inputprocess = KeyInputHandler(getInputSocketAddr())
+        displayProcess = DisplayProcess(getDisplaySocketAddr())    
+
+
+        window = MainWindow(displayProcess)
+        window.show()
+
         displayProcess.start() 
+        inputprocess.start()
         
-        sys.exit( displayProcess.qApplication.exec_() ) ## Must be run from main thread
+        sys.exit( self.qApplication.exec_() ) ## Must be run from main thread
         
 
 scorekeeper = ScoreKeeper();
