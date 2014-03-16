@@ -32,6 +32,9 @@ Rectangle {
             y: 0
             width: 192
             height: 50
+            onClicked:{
+                context.onClicked("Pressed Start Match")
+            }
         }
         
         Text {
