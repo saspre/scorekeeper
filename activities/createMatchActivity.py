@@ -15,7 +15,10 @@ class CreateMatchActivity(Activity):
     def processDisplayMessage(self,message):
         if(message["data"]=="start_match"):
             print("Start Match Button Pressed")
-                
+            data = dict()
+            data["teamA"] = "teama" # mock data
+            data["teamB"] = "teamb" # TODO mock data
+            self.switchActivity("MatchActivity",data)   
     
     def start_match(self,teama,teamb):
         if self.is_active:

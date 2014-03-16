@@ -2,7 +2,14 @@ from activities.activity import Activity
 
 class MatchActivity(Activity):
     
+    def onCreate(self,data=None):
+        self.setLayout("main")
+        self.teamA = data["teamA"]
+        self.teamB = data["teamB"]
+        
+
     def processDisplayMessage(self,message):
+        """
         if message["header"] == "start_match":
             self.start_match(message["data"]["team_a"],message["data"]["team_b"]);
         elif message["header"] == "a_scored":
@@ -21,7 +28,10 @@ class MatchActivity(Activity):
         else:
             print("We (match) received something (message), but we are unsure what it is")
         print('Match is waiting for input:');
-        
+        """
+        pass
+
+
     def end_match(self):
         if not self.is_active:
             print ("Unable to end match, no match in progress!")
@@ -51,8 +61,5 @@ class MatchActivity(Activity):
             "data":{"a":self.match.score_a,
             "b":self.match.score_b}}
             )
-        
-    def onCreate(self, data):
-        self.teamA = data["teamA"]
-        self.teamB = data["teamB"]
+   
         
