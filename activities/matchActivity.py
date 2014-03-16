@@ -15,12 +15,12 @@ class MatchActivity(Activity):
         #Add new players to DB and add to team lists
         for rfid in data["teamA"]:
             if self.session.query(Player).filter(Player.rfid == rfid).count() <= 0:
-                session.add(Player(name=rfid,rfid=rfid))
+                self.session.add(Player(name=rfid,rfid=rfid))
             teamAPlayers.append(self.session.query(Player).filter(Player.rfid == rfid).one())
         
         for rfid in data["teamB"]:
             if self.session.query(Player).filter(Player.rfid == rfid).count() <= 0:
-                session.add(Player(name=rfid,rfid=rfid))
+                self.session.add(Player(name=rfid,rfid=rfid))
             teamBPlayers.append(self.session.query(Player).filter(Player.rfid == rfid).one())
         
         #Check if teams exist in DB
@@ -33,17 +33,15 @@ class MatchActivity(Activity):
         for player in teamBPlayers:
              teamBTeams.append(player.teams)
          
-        intersectList = [filter(lambda x: x in teamATeams[0], sublist) for sublist in teamATeams]
-        print(intersectList)
-        for team in intersectList[0]:
+        intersectList = reduce(lambda xs,ys: filter(lambda x : x in xs,ys),teamATeams)
+        for team in intersectList:
             #team exists, set as local team
             if team.size() == len(teamAPlayers):
                 self.teamA = team
                 break
             
-        intersectList = [filter(lambda x: x in teamBTeams[0], sublist) for sublist in teamBTeams]
-        print(intersectList)
-        for team in intersectList[0]:
+        intersectList = reduce(lambda xs,ys: filter(lambda x : x in xs,ys),teamBTeams)
+        for team in intersectList:
             #team exists, set as local team
             if team.size() == len(teamBPlayers):
                 self.teamB = team
@@ -54,13 +52,13 @@ class MatchActivity(Activity):
             self.teamA = Team(name = "-")
             for player in teamAPlayers:
                 self.teamA.players.append(player)
-            session.add(self.teamA)
+            self.session.add(self.teamA)
         
         if self.teamB == None:
             self.teamB = Team(name = "-")
             for player in teamBPlayers:
                 self.teamB.players.append(player)
-            session.add(self.teamB)    
+            self.session.add(self.teamB)    
         
         if self.teamA == None:
             raise Exception("Team A not set.")

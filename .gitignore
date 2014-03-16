@@ -40,3 +40,4 @@ buttons
 *sublime*
 *.autosave
 database.db
+database.db-journal
