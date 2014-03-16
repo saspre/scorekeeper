@@ -2,14 +2,16 @@ from activities.activity import Activity
 
 class CreateMatchActivity(Activity):
     
-    def __init__(self,controller):
-        super(CreateMatchActivity,self).__init__(controller)
+    #def __init__(self,controller):
+    #    super(CreateMatchActivity,self).__init__(controller = controller)
+    #    teamAPlayers = []
+    #    teamBPlayers = []
+    
+    def onCreate(self,data):
+        self.setLayout("match_setup")
         teamAPlayers = []
         teamBPlayers = []
-    
-    def onCreate(self):
-        self.setLayout("match_setup")
-    
+        
     def processDisplayMessage(self,message):
         if(message["data"]=="start_match"):
             print("Start Match Button Pressed")
