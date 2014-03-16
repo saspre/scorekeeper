@@ -1,5 +1,7 @@
 import QtQuick 1.1
 
+import "core" as Core 
+
 Rectangle {
     id: rectangle1
     width: 480
