@@ -76,23 +76,24 @@ class ControllerProcess (threading.Thread):
     def start_match(self,teama,teamb):
         if self.is_active:
             print ("Unable to start match, already in progress!")
+            #self.end_match()
             return
         team_a = self.session.query(Team).filter(Team.name == teama).one()
         team_b = self.session.query(Team).filter(Team.name == teamb).one()
-        print("Match: received a match, starting match between: "+team_a.name+" and "+team_b.name);
         self.is_active = True
         self.match = Match( team_a = team_a, score_a = 0,\
                             team_b = team_b, score_b = 0)
         self.session.add(self.match)
+        print("Match: received a match, starting match between: "+team_a.name+" and "+team_b.name )
 
 
     def end_match(self):
         if not self.is_active:
             print ("Unable to end match, no match in progress!")
             return
-        print ("Ending match and saving the results")
         self.is_active = False
         self.session.commit()
+        print ("Ending match and saving the results at time: "+self.match.created_at.strftime("%Y-%m-%d %H:%M:%S"))
         self.match = None
 
 
