@@ -44,31 +44,31 @@ Core.Interface {
     
 
     Core.Button {
-        id: team_a_score
+        id: a_scored
         x: 45
         y: 218
        
        
-        callId: "team_a_score"
+        callId: "a_scored"
         btnText: "Score A"
     }
 
      Core.Button {
-        id: team_b_score
+        id: b_scored
         x: 307
         y: 218
        
        
-        callId: "team_b_score"
+        callId: "b_scored"
         btnText: "Score B"
     }
 
     Core.Button {
-        id: end_game
+        id: end_match
         x: 177
         y: 113
-        callId: "end_game"
-        btnText: "End Game"
+        callId: "end_match"
+        btnText: "End Match"
     }
 
 }
