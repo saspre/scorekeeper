@@ -30,6 +30,7 @@ Core.Interface {
         x: 303
         y: 8
         text: qsTr("0")
+        horizontalAlignment: Text.AlignRight
   
     }
 

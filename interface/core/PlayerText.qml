@@ -1,7 +1,7 @@
 
 import QtQuick 1.0
 
-Text {
+BaseText {
     id: playertext
    
     width: 216

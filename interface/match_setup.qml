@@ -42,9 +42,10 @@ Core.Interface {
 
     Core.TeamText {
         id: teambtext
-        x: 250
+        x: 300
         y: 100      
         text: qsTr("Team B")
+        horizontalAlignment: Text.AlignRight
     }
 
     Core.PlayerText {
@@ -61,6 +62,7 @@ Core.Interface {
         y: 127
        
         text: qsTr("(no player scanned)")
+        horizontalAlignment: Text.AlignRight
    
     }
 }
