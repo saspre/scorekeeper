@@ -3,6 +3,7 @@
 #Proccess for management of current match
 import threading, zmq
 from activities.createMatchActivity import CreateMatchActivity
+from activities.matchActivity import MatchActivity
 from models import Match, Session, Player, Team, Base, initSchema
 from sqlalchemy.orm import sessionmaker
 from addresses import *
@@ -33,7 +34,7 @@ class ControllerProcess (threading.Thread):
        
 
     def run(self):
-        self.switch_activity("CreateMatchActivity")
+        self.switchActivity("CreateMatchActivity")
         while True:
             try:
                 poller_socks = dict(self.poller.poll(2))
@@ -57,10 +58,7 @@ class ControllerProcess (threading.Thread):
                         eval("self.activity.process" + key.title() + "Message")(message);
 
 
-    def is_active(self):
-        return self.is_active;
-
-    def switch_activity(self, activity, data = None):
+    def switchActivity(self, activity, data = None):
         self.activity = eval(activity)(self)
         self.activity.onCreate(data)
         
