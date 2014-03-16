@@ -1,5 +1,7 @@
 import QtQuick 1.0
 
+import "core" as Core 
+
 Rectangle {
     width: 480
     height: 272
@@ -18,34 +20,12 @@ Rectangle {
         font.pixelSize: 67
     }
 
-    Rectangle {
-        id: buttonrectangle
+    Core.Button {
+        id: start_match
+        callId: "start_match"
+        btnText: "Start match"
         x: 145
         y: 214
-        width: 191
-        height: 50
-        color: "#178b08"
-        
-        MouseArea {
-            id: mousearea
-            x: -1
-            y: 0
-            width: 192
-            height: 50
-            onClicked:{
-                context.onClicked("Pressed Start Match")
-            }
-        }
-        
-        Text {
-            id: buttontext
-            x: 0
-            y: 0
-            width: 191
-            height: 50
-            text: qsTr("Start Match")
-            font.pixelSize: 34
-        }
     }
 
     Text {

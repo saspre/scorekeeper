@@ -53,7 +53,6 @@ class DisplayProcess(BaseProcess, QThread, QObject):
     functionSignal = Signal(str,str)
 
     
-
     def __init__(self, name, context=None):
         super(DisplayProcess, self).__init__(name=name, context=context)
        
@@ -70,7 +69,6 @@ class DisplayProcess(BaseProcess, QThread, QObject):
 
     @Slot(str)
     def onClicked(self, btn):
-        print btn
         message = {"header":"button_clicked","data":btn}
         self.send(message)
         

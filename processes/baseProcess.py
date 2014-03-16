@@ -32,6 +32,10 @@ class BaseProcess(object):
                 self.processMessage(message);
 
 
+    def send(self, message):
+        self.sock.send_json(message)
+
+
 """
 class ZmqThread (threading.Thread):
     

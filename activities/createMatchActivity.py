@@ -6,7 +6,8 @@ class CreateMatchActivity(Activity):
         self.setLayout("match_setup")
     
     def processDisplayMessage(self,message):
-        print(message)
+        if(message["data"]=="start_match"):
+            print("Start Match Button Pressed")
     
     def start_match(self,teama,teamb):
         if self.is_active:
