@@ -14,14 +14,14 @@ class MatchActivity(Activity):
         
         #Add new players to DB and add to team lists
         for rfid in data["teamA"]:
-            if self.session.query(Player).filter(Player.rfid=rfid).count() <= 0:
+            if self.session.query(Player).filter(Player.rfid == rfid).count() <= 0:
                 session.add(Player(name=rfid,rfid=rfid))
-            teamAPlayers.append(self.session.query(Player).filter(Player.rfid=rfid).one())
+            teamAPlayers.append(self.session.query(Player).filter(Player.rfid == rfid).one())
         
         for rfid in data["teamB"]:
-            if self.session.query(Player).filter(Player.rfid=rfid).count() <= 0:
+            if self.session.query(Player).filter(Player.rfid == rfid).count() <= 0:
                 session.add(Player(name=rfid,rfid=rfid))
-            teamBPlayers.append(self.session.query(Player).filter(Player.rfid=rfid).one())
+            teamBPlayers.append(self.session.query(Player).filter(Player.rfid == rfid).one())
         
         #Check if teams exist in DB
         teamATeams = []
@@ -30,18 +30,20 @@ class MatchActivity(Activity):
         for player in teamAPlayers:
              teamATeams.append(player.teams)
              
-         for player in teamBPlayers:
+        for player in teamBPlayers:
              teamBTeams.append(player.teams)
          
-        intersectList = [filer(lambda x: x in teamATeams[0], sublist) for sublist in teamATeams]
-        for team in intersectList:
+        intersectList = [filter(lambda x: x in teamATeams[0], sublist) for sublist in teamATeams]
+        print(intersectList)
+        for team in intersectList[0]:
             #team exists, set as local team
             if team.size() == len(teamAPlayers):
                 self.teamA = team
                 break
             
-        intersectList = [filer(lambda x: x in teamBTeams[0], sublist) for sublist in teamBTeams]
-        for team in intersectList:
+        intersectList = [filter(lambda x: x in teamBTeams[0], sublist) for sublist in teamBTeams]
+        print(intersectList)
+        for team in intersectList[0]:
             #team exists, set as local team
             if team.size() == len(teamBPlayers):
                 self.teamB = team
@@ -68,6 +70,7 @@ class MatchActivity(Activity):
         
         #Create Match
         self.match = Match(team_a = self.teamA, team_b = self.teamB, score_a = 0, score_b = 0)
+        print(self.match)
 
     def processDisplayMessage(self,message):
         """
