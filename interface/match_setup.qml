@@ -1,167 +1,91 @@
-import QtQuick 1.1
+import QtQuick 1.0
 
 Rectangle {
-    id: rectangle1
     width: 480
     height: 272
-
-
-
-    gradient: Gradient {
-        GradientStop {
-            id: gradientStop1
-            position: 0
-            color: "#ffffff"
-        }
-
-        GradientStop {
-            position: 1
-            color: "#abc09f"
-        }
-    }
-
-    function updateScoreA(string ) {
-        score_a.text = string
-    }
-
-    function updateScoreB(string ) {
-        score_b.text = string
-    }
+    color: "black"
+    border.color: "black"
 
     Text {
-        id: score_a
-        x: 45
+        id: headline
+        x: 9
         y: 8
-        width: 131
-        height: 48
-        text: qsTr("Text")
-        verticalAlignment: Text.AlignVCenter
-        font.pixelSize: 12
-    }
-
-    Text {
-        id: score_b
-        x: 303
-        y: 8
-        width: 131
-        height: 48
-        text: qsTr("Text")
-        verticalAlignment: Text.AlignVCenter
-        horizontalAlignment: Text.AlignRight
-        font.pixelSize: 12
-
-
-        
-      
-    }
-
-    Text {
-        id: dash
-        x: 232
-        y: 5
-        text: qsTr("-")
+        width: 463
+        height: 80
+        color: "#ffffff"
+        text: qsTr("Scan Your Tag")
         horizontalAlignment: Text.AlignHCenter
-        font.pixelSize: 47
-    }
-
-    MouseArea {
-        id: a_scored
-        x: 303
-        y: 200
+        font.pixelSize: 67
     }
 
     Rectangle {
-        id: team_a
-        x: 45
-        y: 218
-        width: 127
-        height: 46
-        color: "#4e3a3a"
-        radius: 10
-
-        TextInput {
-            id: team_a_txt
-            x: 24
-            y: 13
-            width: 80
-            height: 20
-            text: qsTr("A")
-            horizontalAlignment: TextInput.AlignHCenter
-            font.pixelSize: 12
-        }
-
+        id: buttonrectangle
+        x: 145
+        y: 214
+        width: 191
+        height: 50
+        color: "#178b08"
+        
         MouseArea {
-            id: team_a_score_ma
+            id: mousearea
+            x: -1
+            y: 0
+            width: 192
+            height: 50
+        }
+        
+        Text {
+            id: buttontext
             x: 0
             y: 0
-            width: 126
-            height: 46
-            onClicked: {
-                qScoreInterface.aScored()
-            }
+            width: 191
+            height: 50
+            text: qsTr("Start Match")
+            font.pixelSize: 34
         }
     }
 
-    Rectangle {
-        id: team_b
-        x: 307
-        y: 218
-        width: 127
-        height: 46
-        color: "#4e3a3a"
-        radius: 10
-        TextInput {
-            id: team_b_txt
-            x: 24
-            y: 13
-            width: 80
-            height: 20
-            text: qsTr("B")
-            horizontalAlignment: TextInput.AlignHCenter
-            font.pixelSize: 12
-        }
-
-        MouseArea {
-            id: team_b_score_ma
-            x: 0
-            y: 0
-            width: 126
-            height: 46
-            onClicked: {
-                qScoreInterface.bScored()
-            }
-        }
+    Text {
+        id: teamatext
+        x: 10
+        y: 100
+        width: 122
+        height: 26
+        color: "#ffffff"
+        text: qsTr("Team A")
+        font.pixelSize: 22
     }
 
-    Rectangle {
-        id: startstopgame
-        x: 177
-        y: 113
-        width: 127
-        height: 46
-        color: "#4e3a3a"
-        radius: 10
-        TextInput {
-            id: startstopgame_txt
-            x: 24
-            y: 13
-            width: 80
-            height: 20
-            text: qsTr("Start Game")
-            horizontalAlignment: TextInput.AlignHCenter
-            font.pixelSize: 12
-        }
-
-        MouseArea {
-            id: startstopgame_ma
-            x: 1
-            y: 0
-            width: 126
-            height: 46
-            onClicked: {
-                qScoreInterface.startMatch()
-            }
-        }
+    Text {
+        id: teambtext
+        x: 250
+        y: 100
+        width: 122
+        height: 26
+        color: "#ffffff"
+        text: qsTr("Team B")
+        font.pixelSize: 22
     }
 
+    Text {
+        id: teamaplayers
+        x: 10
+        y: 127
+        width: 216
+        height: 68
+        color: "#ffffff"
+        text: qsTr("(no player scanned)")
+        font.pixelSize: 18
+    }
+
+    Text {
+        id: teambplayers
+        x: 256
+        y: 127
+        width: 216
+        height: 68
+        color: "#ffffff"
+        text: qsTr("(no player scanned)")
+        font.pixelSize: 18
+    }
 }
