@@ -4,16 +4,17 @@
 import threading, zmq
 from activities.createMatchActivity import CreateMatchActivity
 from activities.matchActivity import MatchActivity
+from activities.confirmResultActivity import ConfirmResultActivity
 
 from sqlalchemy.orm import sessionmaker
 from addresses import *
-
+from models import Session
 
 class ControllerProcess (threading.Thread):
 
     def __init__(self, context=None):
         super(ControllerProcess, self).__init__()
-        
+        self.session = None
         self.is_active = False;
       
         self.context = context or zmq.Context.instance()
@@ -21,7 +22,6 @@ class ControllerProcess (threading.Thread):
         
         self.sockets = dict()
     
-   
         self.poller = zmq.Poller()
 
         self.createSocket("rfid", getInputSocketAddr())
@@ -32,6 +32,10 @@ class ControllerProcess (threading.Thread):
         self.sockets[name].bind(address)
         self.poller.register(self.sockets[name], zmq.POLLIN)
        
+    def getSession(self):
+        if self.session == None:
+            self.session = Session() 
+        return self.session
 
     def run(self):
         self.switchActivity("CreateMatchActivity")

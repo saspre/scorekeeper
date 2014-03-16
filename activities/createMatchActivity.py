@@ -1,35 +1,100 @@
 from activities.activity import Activity
+import traceback
+from models import Match, Session, Player, Team, Base, initSchema
 
 class CreateMatchActivity(Activity):
     
-    teamAPlayers = []
-    teamBPlayers = []
+   
     
     def onCreate(self,data):
+        self.teamARfid = []
+        self.teamBRfid = []
         self.setLayout("match_setup")
         
     def processDisplayMessage(self,message):
         if(message["data"]=="start_match"):
             print("Start Match Button Pressed")
-            data = dict()
-            data["teamA"] = self.teamAPlayers
-            data["teamB"] = self.teamBPlayers 
-            self.switchActivity("MatchActivity",data)   
+            try:
+                match = self.createMatch()
+                self.switchActivity("MatchActivity", match)   
+            except Exception:
+                self.session.rollback()
+                print(traceback.format_exc())
+
+            
     
-    def start_match(self,teama,teamb):
-        if self.is_active:
-            print ("Unable to start match, already in progress!")
-            #self.end_match()
-            return
-        team_a = self.session.query(Team).filter(Team.name == teama).one()
-        team_b = self.session.query(Team).filter(Team.name == teamb).one()
-        self.is_active = True
-        self.match = Match( team_a = team_a, score_a = 0,\
-                            team_b = team_b, score_b = 0)
-        self.session.add(self.match)
-        self.controller.switch_activity("MatchActivity", {"teamA":self.teamA,"teamB":self.teamB})
-        print("Match: received a match, starting match between: "+team_a.name+" and "+team_b.name )
-        
+    def createMatch(self):
+            
+            teamAPlayers = []
+            teamBPlayers = []
+            teamA = None
+            teamB = None
+
+            if len(self.teamARfid) == 0 or len(self.teamBRfid) == 0:
+                raise Exception("You need to add players you fool")
+
+            #Add new players to DB and add to team lists
+            print self.teamARfid
+            for rfid in self.teamARfid:
+                if self.session.query(Player).filter(Player.rfid == rfid).count() <= 0:
+                    self.session.add(Player(name=rfid,rfid=rfid))
+                teamAPlayers.append(self.session.query(Player).filter(Player.rfid == rfid).one())
+            
+            for rfid in self.teamBRfid:
+                if self.session.query(Player).filter(Player.rfid == rfid).count() <= 0:
+                    self.session.add(Player(name=rfid,rfid=rfid))
+                teamBPlayers.append(self.session.query(Player).filter(Player.rfid == rfid).one())
+            
+            #Check if teams exist in DB
+            teamATeams = []
+            teamBTeams = []
+            
+            for player in teamAPlayers:
+                 teamATeams.append(player.teams)
+                 
+            for player in teamBPlayers:
+                 teamBTeams.append(player.teams)
+             
+            intersectList = reduce(lambda xs,ys: filter(lambda x : x in xs,ys),teamATeams)
+            for team in intersectList:
+                #team exists, set as local team
+                if team.size() == len(teamAPlayers):
+                    teamA = team
+                    break
+                
+            intersectList = reduce(lambda xs,ys: filter(lambda x : x in xs,ys),teamBTeams)
+            for team in intersectList:
+                #team exists, set as local team
+                if team.size() == len(teamBPlayers):
+                    teamB = team
+                    break
+            
+            #team does not exist, so we add a new team
+            if teamA == None:
+                teamA = Team(name = "-")
+                for player in teamAPlayers:
+                    teamA.players.append(player)
+                self.session.add(teamA)
+            
+            if teamB == None:
+                teamB = Team(name = "-")
+                for player in teamBPlayers:
+                    teamB.players.append(player)
+                self.session.add(teamB)    
+            
+            if teamA == None:
+                raise Exception("Team A not set.")
+            
+            if teamB == None:
+                raise Exception("Team B not set.")
+            
+            #Create Match
+            match = Match(team_a = teamA, team_b = teamB, score_a = 0, score_b = 0)
+   
+            print(match)
+            return match
+
+
     def new_player(self, name):
         self.session.add(Player(name = name))
         self.session.commit()
@@ -54,11 +119,11 @@ class CreateMatchActivity(Activity):
             
     def loadPlayer(self,playerRfid):
         #if(self.session.query(Player).filter(Player.id == playerId).count() > 0):
-        if(len(self.teamBPlayers) < len(self.teamAPlayers)):
-            self.teamBPlayers.append(playerRfid)
-            self.controller.sockets["display"].send_json({"header":"call_func","data":{"func":"updateTeamB","param":reduce(lambda x,y: x+"\n" +y,self.teamBPlayers)}})
+        if(len(self.teamBRfid) < len(self.teamARfid)):
+            self.teamBRfid.append(playerRfid)
+            self.controller.sockets["display"].send_json({"header":"call_func","data":{"func":"updateTeamB","param":reduce(lambda x,y: x+"\n" +y,self.teamBRfid)}})
         else:
-            self.teamAPlayers.append(playerRfid)
-            self.controller.sockets["display"].send_json({"header":"call_func","data":{"func":"updateTeamA","param":reduce(lambda x,y: x+"\n" +y,self.teamAPlayers)}})
+            self.teamARfid.append(playerRfid)
+            self.controller.sockets["display"].send_json({"header":"call_func","data":{"func":"updateTeamA","param":reduce(lambda x,y: x+"\n" +y,self.teamARfid)}})
         
         

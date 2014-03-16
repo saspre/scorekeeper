@@ -12,3 +12,7 @@ class Activity:
     def switchActivity(self,activity,data=None):
     	self.controller.switchActivity(activity,data)
 
+    @property
+    def session(self):
+        return self.controller.getSession()
+   
