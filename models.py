@@ -73,7 +73,7 @@ def initData():
     session = Session()
 
     try:
-        p = [Player(name='Rasmus', rfid=1),Player(name='Kim', rfid=2),Player(name='Simon', rfid=3),Player(name='Alex', rfid=4)]
+        p = [Player(name='Rasmus', rfid='1'),Player(name='Kim', rfid='2'),Player(name='Simon', rfid='3'),Player(name='Alex', rfid='4')]
         session.add_all(p)
 
         t = [   \
