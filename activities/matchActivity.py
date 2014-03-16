@@ -68,6 +68,7 @@ class MatchActivity(Activity):
         
         #Create Match
         self.match = Match(team_a = self.teamA, team_b = self.teamB, score_a = 0, score_b = 0)
+        self.session.add(self.match)
         print(self.match)
 
     def processDisplayMessage(self,message):
