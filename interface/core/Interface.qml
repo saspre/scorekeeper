@@ -5,25 +5,15 @@ import QtQuick 1.0
 Rectangle {
     
 
-    id: iface
+    id: root
     width: 480
     height: 272
+    color: "#111111"
 
-
-
-    gradient: Gradient {
-        GradientStop {
-            id: gradientStop1
-            position: 0
-            color: "#000000"
-        }
-
-        GradientStop {
-            position: 1
-            color: "#abc09f"
-        }
+    function getCenterX(item) {
+        return (root.width / 2) - item.width / 2
     }
 
-
+    property int margin: 10
 
 }
