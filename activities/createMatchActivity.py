@@ -3,7 +3,7 @@ from activities.activity import Activity
 class CreateMatchActivity(Activity):
     
     teamAPlayers = []
-    teamBPlayers = [] 
+    teamBPlayers = []
     
     def onCreate(self,data):
         self.setLayout("match_setup")
@@ -12,8 +12,8 @@ class CreateMatchActivity(Activity):
         if(message["data"]=="start_match"):
             print("Start Match Button Pressed")
             data = dict()
-            data["teamA"] = "teama" # mock data
-            data["teamB"] = "teamb" # TODO mock data
+            data["teamA"] = self.teamAPlayers
+            data["teamB"] = self.teamBPlayers
             self.switchActivity("MatchActivity",data)   
     
     def start_match(self,teama,teamb):
@@ -54,6 +54,11 @@ class CreateMatchActivity(Activity):
             
     def loadPlayer(self,playerRfid):
         #if(self.session.query(Player).filter(Player.id == playerId).count() > 0):
-        self.teamAPlayers.append(playerRfid)
-        self.controller.sockets["display"].send_json({"header":"call_func","data":{"func":"updateTeamA","param":playerRfid}})
+        if(len(self.teamBPlayers) < len(self.teamAPlayers)):
+            self.teamBPlayers.append(playerRfid)
+            self.controller.sockets["display"].send_json({"header":"call_func","data":{"func":"updateTeamB","param":reduce(lambda x,y: x+"\n" +y,self.teamBPlayers)}})
+        else:
+            self.teamAPlayers.append(playerRfid)
+            self.controller.sockets["display"].send_json({"header":"call_func","data":{"func":"updateTeamA","param":reduce(lambda x,y: x+"\n" +y,self.teamAPlayers)}})
+        
         

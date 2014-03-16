@@ -7,6 +7,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship, backref
 from datetime import datetime
 import config
+import traceback
 
 Base = declarative_base()
 engine = create_engine(config.Config.get("database","connectionstring"),echo=False)
@@ -73,33 +74,54 @@ def initData():
     session = Session()
 
     try:
-        p = [Player(name='Rasmus'),Player(name='Kim'),Player(name='Simon'),Player(name='Alex')]
+        p = [ \
+                Player(name='Rasmus', rfid='1'),\
+                Player(name='Kim', rfid='2'),\
+                Player(name='Simon', rfid='3'),\
+                Player(name='Alex', rfid='4'),\
+                Player(name='Mikael', rfid='5')\
+            ]
         session.add_all(p)
 
-        t = [   \
-                Team(name=p[0].name+p[1].name),\
-                Team(name=p[0].name+p[2].name),\
-                Team(name=p[0].name+p[3].name),\
-                Team(name=p[1].name+p[2].name),\
-                Team(name=p[1].name+p[3].name),\
-                Team(name=p[2].name+p[3].name) \
-            ]
-        session.add_all(t)
-        t[0].players.append(p[0])
-        t[0].players.append(p[1])
-        t[1].players.append(p[0])
-        t[1].players.append(p[2])
-        t[2].players.append(p[0])
-        t[2].players.append(p[3])
-        t[3].players.append(p[1])
-        t[3].players.append(p[2])
-        t[4].players.append(p[1])
-        t[4].players.append(p[3])
-        t[5].players.append(p[2])
-        t[5].players.append(p[3])
+        single_teams =  [ \
+                            Team(name=p[0].name),\
+                            Team(name=p[1].name),\
+                            Team(name=p[2].name),\
+                            Team(name=p[3].name),\
+                            Team(name=p[4].name)\
+                        ]
+        session.add_all(single_teams)
+        single_teams[0].players.append(p[0])
+        single_teams[1].players.append(p[1])
+        single_teams[2].players.append(p[2])
+        single_teams[3].players.append(p[3])
+        single_teams[4].players.append(p[4])
+
+        multi_teams =   [   \
+                            Team(name=p[0].name+p[1].name),\
+                            Team(name=p[0].name+p[2].name),\
+                            Team(name=p[0].name+p[3].name),\
+                            Team(name=p[1].name+p[2].name),\
+                            Team(name=p[1].name+p[3].name),\
+                            Team(name=p[2].name+p[3].name) \
+                        ]
+        session.add_all(multi_teams)
+        multi_teams[0].players.append(p[0])
+        multi_teams[0].players.append(p[1])
+        multi_teams[1].players.append(p[0])
+        multi_teams[1].players.append(p[2])
+        multi_teams[2].players.append(p[0])
+        multi_teams[2].players.append(p[3])
+        multi_teams[3].players.append(p[1])
+        multi_teams[3].players.append(p[2])
+        multi_teams[4].players.append(p[1])
+        multi_teams[4].players.append(p[3])
+        multi_teams[5].players.append(p[2])
+        multi_teams[5].players.append(p[3])
 
         session.commit()
     except:
+        print(traceback.format_exc())
         session.rollback()
         raise Exception("Rolling back initialize data")
 

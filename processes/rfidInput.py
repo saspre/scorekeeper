@@ -43,7 +43,7 @@ class RfidInput (BaseProcess, threading.Thread):
             while True:
                 rin = raw_input("")
                 self.sock.send_json({"header":"player_rfid","data":rin})
-                print("rfidInput file hej alex")
+                #print("rfidInput file")
                 #TODO: Check for correct input syntax
         except zmq.error.ContextTerminated:
             return
