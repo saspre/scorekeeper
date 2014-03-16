@@ -53,7 +53,6 @@ class DisplayProcess(BaseProcess, QThread, QObject):
     functionSignal = Signal(str,str)
 
     
-
     def __init__(self, name, context=None):
         super(DisplayProcess, self).__init__(name=name, context=context)
        
