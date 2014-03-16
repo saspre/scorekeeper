@@ -9,3 +9,6 @@ class Activity:
         self.controller.sockets["display"].send_json({"header":"set_layout","data":layout})
         pass
 
+    def switchActivity(self,activity,data=None):
+    	self.controller.switchActivity(activity,data)
+

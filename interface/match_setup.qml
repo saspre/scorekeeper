@@ -7,6 +7,14 @@ Rectangle {
     height: 272
     color: "black"
     border.color: "black"
+    
+    function updateTeamA(playerIds){
+        teamaplayers.text = playerIds
+    }
+    
+    function updateTeamB(playerIds){
+        teambplayers.text = playerIds
+    }
 
     Text {
         id: headline

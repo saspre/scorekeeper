@@ -2,12 +2,27 @@ from activities.activity import Activity
 
 class CreateMatchActivity(Activity):
     
-    def onCreate(self):
-        self.setLayout("match_setup")
+    teamAPlayers = []
+    teamBPlayers = []
     
+    
+    #def __init__(self,controller):
+    #    super(CreateMatchActivity,self).__init__(controller = controller)
+    #    teamAPlayers = []
+    #    teamBPlayers = []
+    
+    
+    
+    def onCreate(self,data):
+        self.setLayout("match_setup")
+        
     def processDisplayMessage(self,message):
         if(message["data"]=="start_match"):
             print("Start Match Button Pressed")
+            data = dict()
+            data["teamA"] = "teama" # mock data
+            data["teamB"] = "teamb" # TODO mock data
+            self.switchActivity("MatchActivity",data)   
     
     def start_match(self,teama,teamb):
         if self.is_active:
@@ -20,6 +35,7 @@ class CreateMatchActivity(Activity):
         self.match = Match( team_a = team_a, score_a = 0,\
                             team_b = team_b, score_b = 0)
         self.session.add(self.match)
+        self.controller.switch_activity("MatchActivity", {"teamA":self.teamA,"teamB":self.teamB})
         print("Match: received a match, starting match between: "+team_a.name+" and "+team_b.name )
         
     def new_player(self, name):
@@ -38,3 +54,19 @@ class CreateMatchActivity(Activity):
         for player in players:
             team.players.append(player)
         self.session.commit()
+        
+    def processRfidMessage(self,message):
+        if(message["header"]=="player_rfid"):
+            self.loadPlayer(message["data"])
+            
+            
+    def loadPlayer(self,playerRfid):
+        #if(self.session.query(Player).filter(Player.id == playerId).count() > 0):
+        if(len(self.teamBPlayers) < len(self.teamAPlayers)):
+            self.teamBPlayers.append(playerRfid)
+            self.controller.sockets["display"].send_json({"header":"call_func","data":{"func":"updateTeamB","param":reduce(lambda x,y: x+"\n" +y,self.teamBPlayers)}})
+        else:
+            self.teamAPlayers.append(playerRfid)
+            self.controller.sockets["display"].send_json({"header":"call_func","data":{"func":"updateTeamA","param":reduce(lambda x,y: x+"\n" +y,self.teamAPlayers)}})
+        
+        
