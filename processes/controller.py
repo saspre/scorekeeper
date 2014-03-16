@@ -24,11 +24,14 @@ class ControllerProcess (threading.Thread):
         self.displaySocket = self.context.socket(zmq.PAIR)
         self.displaySocket.bind(getDisplaySocketAddr())
         self.poller = zmq.Poller()
-        self.activity = CreateMatchActivity(self)
-        self.activity.onCreate()
+        self.poller.register(self.displaySocket, zmq.POLLIN)
+        
+        
        
 
     def run(self):
+        self.activity = CreateMatchActivity(self)
+        self.activity.onCreate()
         while True:
             try:
                 poller_socks = dict(self.poller.poll(2))

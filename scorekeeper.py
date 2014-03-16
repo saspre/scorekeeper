@@ -17,7 +17,7 @@ class ScoreKeeper():
     
     def start(self):
         self.qApplication = QtGui.QApplication( sys.argv )
-        self.controller.start();
+        
 
 
       
@@ -26,6 +26,7 @@ class ScoreKeeper():
         inputprocess = KeyInputHandler(getInputSocketAddr())
         displayProcess = DisplayProcess(getDisplaySocketAddr())    
 
+        self.controller.start();
 
         window = MainWindow(displayProcess)
         window.show()
