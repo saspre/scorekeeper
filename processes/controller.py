@@ -4,7 +4,7 @@
 import threading, zmq
 from activities.createMatchActivity import CreateMatchActivity
 from activities.matchActivity import MatchActivity
-from models import Match, Session, Player, Team, Base, initSchema
+
 from sqlalchemy.orm import sessionmaker
 from addresses import *
 
@@ -15,10 +15,10 @@ class ControllerProcess (threading.Thread):
         super(ControllerProcess, self).__init__()
         
         self.is_active = False;
-        self.match = Match()
+      
         self.context = context or zmq.Context.instance()
 
-        self.session = Session()
+        
         self.sockets = dict()
     
    
