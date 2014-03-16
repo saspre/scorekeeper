@@ -2,6 +2,9 @@ from activities.activity import Activity
 
 class CreateMatchActivity(Activity):
     
+    def onCreate(self):
+        self.setLayout("match_setup")
+    
     def processDisplayMessage(self,message):
         print(message)
     

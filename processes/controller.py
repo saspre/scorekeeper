@@ -25,6 +25,7 @@ class ControllerProcess (threading.Thread):
         self.displaySocket.bind(getDisplaySocketAddr())
         self.poller = zmq.Poller()
         self.activity = CreateMatchActivity(self)
+        self.activity.onCreate()
        
 
     def run(self):
@@ -53,7 +54,8 @@ class ControllerProcess (threading.Thread):
         return self.is_active;
 
     def switch_activity(self, activity):
-        self.activity = activity
+        self.activity = eval(activity)(self)
+        self.activity.onCreate()
         
     
         
