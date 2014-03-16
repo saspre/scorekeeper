@@ -7,7 +7,7 @@ import config
 #drop and create tables
 def initDatabase():
     #read config file
-    database = config.configSectionMap("database")['name']
+    database = config.Config.get("database",'name')
     con = None
 
     f = open('schema.sql', 'r')
