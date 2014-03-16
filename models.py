@@ -2,9 +2,10 @@
 # I have collected all models into this file/module because it is easier for SQLAlchemy 
 # Feel free to split it up into more files if you can (dare)
 
-from sqlalchemy import create_engine, Column, Integer, String, Sequence, Table, Text, ForeignKey
+from sqlalchemy import create_engine, Column, Integer, String, Sequence, Table, Text, ForeignKey, DateTime, func
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship, backref
+from datetime import datetime
 import config
 
 Base = declarative_base()
@@ -25,6 +26,7 @@ class Player(Base):
 
     id = Column(Integer,Sequence('player_id_seq'),primary_key=True)
     name = Column(String)
+    created_at = Column(DateTime, default=func.now())
 
     def __repr__(self):
         return "<Player(name='%s')>" % (self.name)
@@ -40,6 +42,7 @@ class Match(Base):
     team_a = relationship('Team', backref=backref('matches_a', order_by=id),foreign_keys=team_a_id)
     team_b_id = Column(Integer,ForeignKey('teams.id'))
     team_b = relationship('Team', backref=backref('matches_b', order_by=id),foreign_keys=team_b_id)
+    created_at = Column(DateTime, default=func.now())
 
     def __repr__(self):
         return "<Match(team_a='%s', score_a='%s', team_b='%s', score_b='%s')>" % (self.team_a, self.score_a, self.team_b, self.score_b)
@@ -51,6 +54,7 @@ class Team(Base):
     id = Column(Integer,Sequence('team_id_seq'),primary_key=True)
     name = Column(String)
     players = relationship('Player',secondary='player_team',backref='teams')
+    created_at = Column(DateTime, default=func.now())
 
     def matches(self):
         return self.matches_a + self.matches_b
