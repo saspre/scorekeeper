@@ -19,7 +19,7 @@ Rectangle {
     }
 
     Rectangle {
-        id: buttonrectangle
+        id: start_match
         x: 145
         y: 214
         width: 191
@@ -33,7 +33,7 @@ Rectangle {
             width: 192
             height: 50
             onClicked:{
-                context.onClicked("Pressed Start Match")
+                context.onClicked("start_match")
             }
         }
         

@@ -69,7 +69,6 @@ class DisplayProcess(BaseProcess, QThread, QObject):
 
     @Slot(str)
     def onClicked(self, btn):
-        print btn
         message = {"header":"button_clicked","data":btn}
         self.send(message)
         
