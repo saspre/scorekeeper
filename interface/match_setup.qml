@@ -4,6 +4,7 @@ import "core" as Core
 
 Core.Interface {
     id: match_setup
+  
  
     function updateTeamA(playerIds){
         teamaplayers.text = playerIds
@@ -13,9 +14,10 @@ Core.Interface {
         teambplayers.text = playerIds
     }
 
+    
     Text {
         id: headline
-        x: 9
+        x: match_setup.margin
         y: 8
         width: 463
         height: 80
@@ -29,7 +31,8 @@ Core.Interface {
         id: start_match
         callId: "start_match"
         btnText: "Start match"
-        x: 145
+        width: match_setup.width / 2
+        x: match_setup.getCenterX(start_match)
         y: 214
     }
 

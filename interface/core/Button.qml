@@ -2,24 +2,26 @@ import QtQuick 1.0
 
 Rectangle {
     id: button
-    width: 191
+    width: 150
     height: 50
-    color: "#178b08"
+    color: startColor
     radius: 10
     property string btnText
     property string callId
+    property string startColor:"#178b08" 
+    border.color: "#645fa9"
+    border.width: 2
     
     MouseArea {
            
        anchors.fill: parent
        onPressed: parent.color = "#645fa9"
-       onReleased: parent.color = "#d1d7f5"
+       onReleased: parent.color = button.startColor
        onClicked: {
            context.onClicked(button.callId)
         }
     }
-    border.color: "#645fa9"
-    border.width: 2
+   
    
     
     Text {
