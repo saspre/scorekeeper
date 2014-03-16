@@ -34,7 +34,7 @@ Rectangle {
         y: 8
         width: 131
         height: 48
-        text: qsTr("Text")
+        text: qsTr("0")
         verticalAlignment: Text.AlignVCenter
         font.pixelSize: 12
     }
@@ -45,7 +45,7 @@ Rectangle {
         y: 8
         width: 131
         height: 48
-        text: qsTr("Text")
+        text: qsTr("0")
         verticalAlignment: Text.AlignVCenter
         horizontalAlignment: Text.AlignRight
         font.pixelSize: 12
