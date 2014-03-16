@@ -91,13 +91,13 @@ Rectangle {
         }
 
         MouseArea {
-            id: team_a_score_ma
+            id: team_a_score
             x: 0
             y: 0
             width: 126
             height: 46
             onClicked: {
-                qScoreInterface.aScored()
+                context.onClicked("team_a_score")
             }
         }
     }
@@ -122,13 +122,13 @@ Rectangle {
         }
 
         MouseArea {
-            id: team_b_score_ma
+            id: team_b_score
             x: 0
             y: 0
             width: 126
             height: 46
             onClicked: {
-                qScoreInterface.bScored()
+                context.onClicked("team_b_score")
             }
         }
     }
