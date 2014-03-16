@@ -33,8 +33,7 @@ class ControllerProcess (threading.Thread):
        
 
     def run(self):
-        self.activity = CreateMatchActivity(self)
-        self.activity.onCreate()
+        self.switch_activity("CreateMatchActivity")
         while True:
             try:
                 poller_socks = dict(self.poller.poll(2))
@@ -61,9 +60,9 @@ class ControllerProcess (threading.Thread):
     def is_active(self):
         return self.is_active;
 
-    def switch_activity(self, activity):
+    def switch_activity(self, activity, data = None):
         self.activity = eval(activity)(self)
-        self.activity.onCreate()
+        self.activity.onCreate(data)
         
     
         
