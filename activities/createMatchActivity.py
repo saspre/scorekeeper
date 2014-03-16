@@ -3,14 +3,7 @@ from activities.activity import Activity
 class CreateMatchActivity(Activity):
     
     teamAPlayers = []
-    teamBPlayers = []
-    
-    #def __init__(self,controller):
-    #    super(CreateMatchActivity,self).__init__(controller = controller)
-    #    teamAPlayers = []
-    #    teamBPlayers = []
-    
-    
+    teamBPlayers = [] 
     
     def onCreate(self,data):
         self.setLayout("match_setup")
