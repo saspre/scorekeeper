@@ -9,7 +9,7 @@ from datetime import datetime
 import config
 
 Base = declarative_base()
-engine = create_engine(config.configSectionMap('database')['connectionstring'],echo=False)
+engine = create_engine(config.Config.get("database","connectionstring"),echo=False)
 Session = sessionmaker(bind=engine)
 
 #################################################################################################################
