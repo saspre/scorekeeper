@@ -2,25 +2,13 @@ import QtQuick 1.1
 
 import "core" as Core 
 
-Rectangle {
-    id: rectangle1
+Core.Interface {
+    id: match
     width: 480
     height: 272
 
 
 
-    gradient: Gradient {
-        GradientStop {
-            id: gradientStop1
-            position: 0
-            color: "#ffffff"
-        }
-
-        GradientStop {
-            position: 1
-            color: "#abc09f"
-        }
-    }
 
     function updateScoreA(string ) {
         score_a.text = string
@@ -30,140 +18,56 @@ Rectangle {
         score_b.text = string
     }
 
-    Text {
+    Core.ScoreText {
         id: score_a
         x: 45
         y: 8
-        width: 131
-        height: 48
         text: qsTr("0")
-        verticalAlignment: Text.AlignVCenter
-        font.pixelSize: 42
     }
 
-    Text {
+    Core.ScoreText {
         id: score_b
         x: 303
         y: 8
-        width: 131
-        height: 48
         text: qsTr("0")
-        verticalAlignment: Text.AlignVCenter
-        horizontalAlignment: Text.AlignRight
-        font.pixelSize: 42
-
-
-        
-      
+  
     }
 
-    Text {
+    Core.ScoreText {
         id: dash
         x: 232
-        y: 5
+        y: 8
         text: qsTr("-")
-        horizontalAlignment: Text.AlignHCenter
-        font.pixelSize: 47
     }
 
-    MouseArea {
-        id: a_scored
-        x: 303
-        y: 200
-    }
+    
 
-    Rectangle {
-        id: team_a
+    Core.Button {
+        id: team_a_score
         x: 45
         y: 218
-        width: 127
-        height: 46
-        color: "#4e3a3a"
-        radius: 10
-
-        TextInput {
-            id: team_a_txt
-            x: 24
-            y: 13
-            width: 80
-            height: 20
-            text: qsTr("A")
-            horizontalAlignment: TextInput.AlignHCenter
-            font.pixelSize: 12
-        }
-
-        MouseArea {
-            id: team_a_score
-            x: 0
-            y: 0
-            width: 126
-            height: 46
-            onClicked: {
-                context.onClicked("team_a_score")
-            }
-        }
+       
+       
+        callId: "team_a_score"
+        btnText: "Score A"
     }
 
-    Rectangle {
-        id: team_b
+     Core.Button {
+        id: team_b_score
         x: 307
         y: 218
-        width: 127
-        height: 46
-        color: "#4e3a3a"
-        radius: 10
-        TextInput {
-            id: team_b_txt
-            x: 24
-            y: 13
-            width: 80
-            height: 20
-            text: qsTr("B")
-            horizontalAlignment: TextInput.AlignHCenter
-            font.pixelSize: 12
-        }
-
-        MouseArea {
-            id: team_b_score
-            x: 0
-            y: 0
-            width: 126
-            height: 46
-            onClicked: {
-                context.onClicked("team_b_score")
-            }
-        }
+       
+       
+        callId: "team_b_score"
+        btnText: "Score B"
     }
 
-    Rectangle {
-        id: startstopgame
+    Core.Button {
+        id: start_game
         x: 177
         y: 113
-        width: 127
-        height: 46
-        color: "#4e3a3a"
-        radius: 10
-        TextInput {
-            id: startstopgame_txt
-            x: 24
-            y: 13
-            width: 80
-            height: 20
-            text: qsTr("Start Game")
-            horizontalAlignment: TextInput.AlignHCenter
-            font.pixelSize: 12
-        }
-
-        MouseArea {
-            id: startstopgame_ma
-            x: 1
-            y: 0
-            width: 126
-            height: 46
-            onClicked: {
-                qScoreInterface.startMatch()
-            }
-        }
+        callId: "start_game"
+        btnText: "Start Game"
     }
 
 }

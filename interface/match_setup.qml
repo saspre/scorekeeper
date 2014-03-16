@@ -2,12 +2,9 @@ import QtQuick 1.0
 
 import "core" as Core 
 
-Rectangle {
-    width: 480
-    height: 272
-    color: "black"
-    border.color: "black"
-    
+Core.Interface {
+    id: match_setup
+ 
     function updateTeamA(playerIds){
         teamaplayers.text = playerIds
     }
@@ -36,47 +33,34 @@ Rectangle {
         y: 214
     }
 
-    Text {
+    Core.TeamText {
         id: teamatext
         x: 10
-        y: 100
-        width: 122
-        height: 26
-        color: "#ffffff"
+        y: 100   
         text: qsTr("Team A")
-        font.pixelSize: 22
     }
 
-    Text {
+    Core.TeamText {
         id: teambtext
         x: 250
-        y: 100
-        width: 122
-        height: 26
-        color: "#ffffff"
+        y: 100      
         text: qsTr("Team B")
-        font.pixelSize: 22
     }
 
-    Text {
+    Core.PlayerText {
         id: teamaplayers
         x: 10
         y: 127
-        width: 216
-        height: 68
-        color: "#ffffff"
-        text: qsTr("(no player scanned)")
-        font.pixelSize: 18
+         text: qsTr("(no player scanned)")
+       
     }
 
-    Text {
+    Core.PlayerText {
         id: teambplayers
         x: 256
         y: 127
-        width: 216
-        height: 68
-        color: "#ffffff"
+       
         text: qsTr("(no player scanned)")
-        font.pixelSize: 18
+   
     }
 }
