@@ -61,6 +61,9 @@ class Team(Base):
     def matches(self):
         return self.matches_a + self.matches_b
 
+    def size(self):
+        return len(self.players)
+
     def __repr__(self):
         return "<Team(name='%s')>" % (self.name)
 
@@ -97,6 +100,8 @@ def initData():
         single_teams[3].players.append(p[3])
         single_teams[4].players.append(p[4])
 
+        for x in xrange(1,10):
+            pass
         multi_teams =   [   \
                             Team(name=p[0].name+p[1].name),\
                             Team(name=p[0].name+p[2].name),\

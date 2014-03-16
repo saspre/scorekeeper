@@ -1,12 +1,76 @@
 from activities.activity import Activity
+from models import Match, Session, Player, Team, Base, initSchema
 
 class MatchActivity(Activity):
+    session = Session()
+    match = None
+    teamA = None
+    teamB = None
     
     def onCreate(self,data=None):
         self.setLayout("match")
-        self.teamA = data["teamA"]
-        self.teamB = data["teamB"]
+        teamAPlayers = []
+        teamBPlayers = []
         
+        #Add new players to DB and add to team lists
+        for rfid in data["teamA"]:
+            if self.session.query(Player).filter(Player.rfid == rfid).count() <= 0:
+                session.add(Player(name=rfid,rfid=rfid))
+            teamAPlayers.append(self.session.query(Player).filter(Player.rfid == rfid).one())
+        
+        for rfid in data["teamB"]:
+            if self.session.query(Player).filter(Player.rfid == rfid).count() <= 0:
+                session.add(Player(name=rfid,rfid=rfid))
+            teamBPlayers.append(self.session.query(Player).filter(Player.rfid == rfid).one())
+        
+        #Check if teams exist in DB
+        teamATeams = []
+        teamBTeams = []
+        
+        for player in teamAPlayers:
+             teamATeams.append(player.teams)
+             
+        for player in teamBPlayers:
+             teamBTeams.append(player.teams)
+         
+        intersectList = [filter(lambda x: x in teamATeams[0], sublist) for sublist in teamATeams]
+        print(intersectList)
+        for team in intersectList[0]:
+            #team exists, set as local team
+            if team.size() == len(teamAPlayers):
+                self.teamA = team
+                break
+            
+        intersectList = [filter(lambda x: x in teamBTeams[0], sublist) for sublist in teamBTeams]
+        print(intersectList)
+        for team in intersectList[0]:
+            #team exists, set as local team
+            if team.size() == len(teamBPlayers):
+                self.teamB = team
+                break
+        
+        #team does not exist, so we add a new team
+        if self.teamA == None:
+            self.teamA = Team(name = "-")
+            for player in teamAPlayers:
+                self.teamA.players.append(player)
+            session.add(self.teamA)
+        
+        if self.teamB == None:
+            self.teamB = Team(name = "-")
+            for player in teamBPlayers:
+                self.teamB.players.append(player)
+            session.add(self.teamB)    
+        
+        if self.teamA == None:
+            raise Exception("Team A not set.")
+        
+        if self.teamB == None:
+            raise Exception("Team B not set.")
+        
+        #Create Match
+        self.match = Match(team_a = self.teamA, team_b = self.teamB, score_a = 0, score_b = 0)
+        print(self.match)
 
     def processDisplayMessage(self,message):
         """
