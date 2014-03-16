@@ -3,7 +3,7 @@ from activities.activity import Activity
 class MatchActivity(Activity):
     
     def onCreate(self,data=None):
-        self.setLayout("main")
+        self.setLayout("match")
         self.teamA = data["teamA"]
         self.teamB = data["teamB"]
         
