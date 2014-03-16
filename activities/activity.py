@@ -6,5 +6,6 @@ class Activity:
         self.controller = controller
         
     def setLayout(self,layout):
-        self.controller.displaySocket.send_json({"header":"set_layout","data":layout})
+        self.controller.sockets["display"].send_json({"header":"set_layout","data":layout})
         pass
+

@@ -18,15 +18,18 @@ class ControllerProcess (threading.Thread):
         self.context = context or zmq.Context.instance()
 
         self.session = Session()
-
-        self.inputSocket = self.context.socket(zmq.PAIR)
-        self.inputSocket.bind(getInputSocketAddr())
-        self.displaySocket = self.context.socket(zmq.PAIR)
-        self.displaySocket.bind(getDisplaySocketAddr())
+        self.sockets = dict()
+    
+   
         self.poller = zmq.Poller()
-        self.poller.register(self.displaySocket, zmq.POLLIN)
+
+        self.createSocket("rfid", getInputSocketAddr())
+        self.createSocket("display", getDisplaySocketAddr())
         
-        
+    def createSocket(self, name, address):
+        self.sockets[name] = self.context.socket(zmq.PAIR)
+        self.sockets[name].bind(address)
+        self.poller.register(self.sockets[name], zmq.POLLIN)
        
 
     def run(self):
@@ -39,18 +42,20 @@ class ControllerProcess (threading.Thread):
                 print("Received Key interrupt. Exiting")
                 break
 
-            try:
-                message = self.displaySocket.recv_json()
-            except zmq.error.ContextTerminated:
-                break;
-
-            if message["header"] == "stop":
-                self.displaySocket.send_json({"header":"stop"})
-                break;
-            elif message['header'] == "echo":
-                self.inputSocket.send_json({'header':'respond_echo'})
-            else:
-                self.activity.processDisplayMessage(message);
+            for key in self.sockets:
+                if self.sockets[key] in poller_socks:
+                    try:
+                        message = self.sockets[key].recv_json()
+                    except zmq.error.ContextTerminated:
+                        break;
+        
+                    if message["header"] == "stop":
+                        self.sockets[key].send_json({"header":"stop"})
+                        break;
+                    elif message['header'] == "echo":
+                        self.sockets[key].send_json({'header':'respond_echo'})
+                    else:
+                        eval("self.activity.process" + key.title() + "Message")(message);
 
 
     def is_active(self):
