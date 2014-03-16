@@ -21,7 +21,7 @@ class CreateMatchActivity(Activity):
             print("Start Match Button Pressed")
             data = dict()
             data["teamA"] = self.teamAPlayers
-            data["teamB"] = self.teamBPlayers
+            data["teamB"] = self.teamBPlayers 
             self.switchActivity("MatchActivity",data)   
     
     def start_match(self,teama,teamb):
