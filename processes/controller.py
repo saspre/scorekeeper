@@ -56,9 +56,9 @@ class ControllerProcess (threading.Thread):
     def is_active(self):
         return self.is_active;
 
-    def switch_activity(self, activity):
+    def switch_activity(self, activity, data):
         self.activity = eval(activity)(self)
-        self.activity.onCreate()
+        self.activity.onCreate(data)
         
     
         

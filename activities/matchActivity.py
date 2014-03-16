@@ -51,4 +51,8 @@ class MatchActivity(Activity):
             "data":{"a":self.match.score_a,
             "b":self.match.score_b}}
             )
-    
+        
+    def onCreate(self, data):
+        self.teamA = data["teamA"]
+        self.teamB = data["teamB"]
+        
