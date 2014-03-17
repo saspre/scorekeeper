@@ -33,6 +33,13 @@ class Player(Base):
     def __repr__(self):
         return "<Player(name='%s')>" % (self.name)
 
+    @staticmethod
+    def createOrLoad(rfid,session):
+        playerList = session.query(Player).filter(Player.rfid == rfid)
+        if playerList.count() <= 0:
+            session.add(Player(name=rfid,rfid=rfid))
+        return session.query(Player).filter(Player.rfid == rfid).one()
+
 #################################################################################################################
 class Match(Base):
     __tablename__ = 'matches'
@@ -65,7 +72,32 @@ class Team(Base):
         return len(self.players)
 
     def __repr__(self):
-        return "<Team(name='%s')>" % (self.name)
+        return "<Team(name='%s', players='%s')>" % (self.name, self.players)
+
+    @staticmethod
+    def createOrLoad(players,session):
+        teams = []
+        resultTeam = None
+        for player in players:
+            teams.append(player.teams)
+             
+        intersectList = reduce(lambda xs,ys: filter(lambda x : x in xs,ys),teams)
+        for team in intersectList:
+            #team exists, set as local team
+            if team.size() == len(teams):
+                resultTeam = team
+                break
+
+        if resultTeam == None:
+            resultTeam = Team(name = " & ".join(map(lambda x: x.name,players)))
+            for player in players:
+                resultTeam.players.append(player)
+            session.add(resultTeam)
+        
+        if resultTeam == None:
+            raise Exception("Result team not set.")
+
+        return resultTeam
 
 def initSchema():
     Base.metadata.create_all(engine)
@@ -85,44 +117,6 @@ def initData():
                 Player(name='Mikael', rfid='5')\
             ]
         session.add_all(p)
-
-        single_teams =  [ \
-                            Team(name=p[0].name),\
-                            Team(name=p[1].name),\
-                            Team(name=p[2].name),\
-                            Team(name=p[3].name),\
-                            Team(name=p[4].name)\
-                        ]
-        session.add_all(single_teams)
-        single_teams[0].players.append(p[0])
-        single_teams[1].players.append(p[1])
-        single_teams[2].players.append(p[2])
-        single_teams[3].players.append(p[3])
-        single_teams[4].players.append(p[4])
-
-        for x in xrange(1,10):
-            pass
-        multi_teams =   [   \
-                            Team(name=p[0].name+p[1].name),\
-                            Team(name=p[0].name+p[2].name),\
-                            Team(name=p[0].name+p[3].name),\
-                            Team(name=p[1].name+p[2].name),\
-                            Team(name=p[1].name+p[3].name),\
-                            Team(name=p[2].name+p[3].name) \
-                        ]
-        session.add_all(multi_teams)
-        multi_teams[0].players.append(p[0])
-        multi_teams[0].players.append(p[1])
-        multi_teams[1].players.append(p[0])
-        multi_teams[1].players.append(p[2])
-        multi_teams[2].players.append(p[0])
-        multi_teams[2].players.append(p[3])
-        multi_teams[3].players.append(p[1])
-        multi_teams[3].players.append(p[2])
-        multi_teams[4].players.append(p[1])
-        multi_teams[4].players.append(p[3])
-        multi_teams[5].players.append(p[2])
-        multi_teams[5].players.append(p[3])
 
         session.commit()
     except:

@@ -16,3 +16,8 @@ class Activity:
     def session(self):
         return self.controller.getSession()
    
+    def processRfidMessage(self,message):
+        print("Unable to handle RFID message in this activity. Override processRfidMessage to make it work.")
+   
+    def processDisplayMessage(self,message):
+        print("Unable to handle RFID message in this activity. Override processDisplayMessage to make it work.")
