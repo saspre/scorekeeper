@@ -1,8 +1,8 @@
-from activities.activity import Activity
+from red.activity import Activity
 import traceback
 from models import Match, Session, Player, Team, Base, initSchema
 
-class CreateMatchActivity(Activity):
+class Creatematch(Activity):
     
     def onCreate(self,data):
         self.teamARfid = []
@@ -10,12 +10,15 @@ class CreateMatchActivity(Activity):
         self.setLayout("match_setup")
         
 
-    def processDisplayMessage(self,message):
+    def receiveDisplayMessage(self,message):
+
+        if message ["head"] == "echo":
+            return 
         if(message["data"]=="start_match"):
             print("Start Match Button Pressed")
             try:
                 match = self.createMatch()
-                self.switchActivity("MatchActivity", match)   
+                self.switchActivity("match", match)   
             except Exception:
                 self.session.rollback()
                 print(traceback.format_exc())
@@ -45,17 +48,17 @@ class CreateMatchActivity(Activity):
             return match
 
         
-    def processRfidMessage(self,message):
-        if(message["header"]=="player_rfid"):
+    def receiveRfidinputMessage(self,message):
+        if message["head"]=="player_rfid":
             self.loadPlayer(message["data"])
             
             
     def loadPlayer(self,playerRfid):
         if(len(self.teamBRfid) < len(self.teamARfid)):
             self.teamBRfid.append(playerRfid)
-            self.controller.sockets["display"].send_json({"header":"call_func","data":{"func":"updateTeamB","param":"\n".join(self.teamBRfid)}})
+            self.send("display",{"head":"call_func","data":{"func":"updateTeamB","param":"\n".join(self.teamBRfid)}})
         else:
             self.teamARfid.append(playerRfid)
-            self.controller.sockets["display"].send_json({"header":"call_func","data":{"func":"updateTeamA","param":"\n".join(self.teamARfid)}})
+            self.send("display",{"head":"call_func","data":{"func":"updateTeamA","param":"\n".join(self.teamARfid)}})
         
         

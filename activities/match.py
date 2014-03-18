@@ -1,7 +1,7 @@
-from activities.activity import Activity
+from red.activity import Activity
 from models import Match, Session, Player, Team, Base, initSchema
 
-class MatchActivity(Activity):
+class Match(Activity):
    
     def onCreate(self,data=None):
         self.setLayout("match")
@@ -9,8 +9,9 @@ class MatchActivity(Activity):
         self.updateLayout()
      
 
-    def processDisplayMessage(self,message):
-        if message["header"] == "button_clicked":          
+    def receiveDisplayMessage(self,message):
+        print message
+        if message["head"] == "button_clicked":          
             if message["data"] == "a_scored":
                 self.team_scored("a");
             elif message["data"] == "b_scored":
@@ -27,7 +28,7 @@ class MatchActivity(Activity):
     def end_match(self):
                
         #print ("Ending match and saving the results at time: "+self.match.created_at.strftime("%Y-%m-%d %H:%M:%S"))
-        self.switchActivity("ConfirmResultActivity", self.match)
+        self.switchActivity("confirmresult", self.match)
         
     def team_scored(self, team):
        
@@ -49,17 +50,10 @@ class MatchActivity(Activity):
 
     def updateLayout(self):
 
-        message =  {"header":"call_func", 
-                    "data":{"func":"updateScoreA",
-                            "param":self.match.score_a}}
 
-        self.controller.sockets["display"].send_json(message)
-
-        message =  {"header":"call_func", 
-                    "data":{"func":"updateScoreB",
-                            "param":self.match.score_b}}
-
-        self.controller.sockets["display"].send_json(message)
+        self.callLayoutFunc("updateScoreA",self.match.score_a)
     
+        self.callLayoutFunc("updateScoreB",self.match.score_b)
+            
 
-        
+    

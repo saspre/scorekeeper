@@ -1,23 +1,23 @@
 
-from activities.activity import Activity
+from red.activity import Activity
 
 
-class ConfirmResultActivity (Activity):
+class Confirmresult (Activity):
 
     def onCreate(self, data=None):
         self.setLayout("confirm")
         self.match = data
 
-    def processDisplayMessage(self,message):
-        if message["header"] == "button_clicked":          
+    def receiveDisplayMessage(self,message):
+        if message["head"] == "button_clicked":          
             if message["data"] == "confirm":
                 self.saveMatch()
             elif message["data"] == "cancel":
-                self.switchActivity("MatchActivity", self.match)
+                self.switchActivity("match", self.match)
         
         else:
             print("We " + __file__ +" received something (message), but we are unsure what it is")
       
     def saveMatch(self):
         self.session.commit()
-        self.switchActivity("CreateMatchActivity", self.match)
+        self.switchActivity("creatematch", self.match)

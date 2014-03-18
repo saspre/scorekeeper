@@ -1,15 +1,5 @@
 #!/usr/bin/python2
-#main launcher
-from processes.controller import ControllerProcess
-from processes.input import KeyInputHandler 
-from processes.rfidInput import RfidInput
-from processes.display import DisplayProcess, MainWindow
-from PySide import QtCore,QtDeclarative, QtGui
-import zmq, time, sys
-from addresses import *
-from models import initSchema,initData
-
-
+#main launche
 
 
 import time
