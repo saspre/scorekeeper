@@ -1,7 +1,7 @@
 #!/usr/bin/python
 import unittest
 import config
-config.initConfig('test_conf.conf') # must be called before importing models to ensure memory based db
+config.initConfig('config/test_conf.conf') # must be called before importing models to ensure memory based db
 from models.model import Player, Match, Team, initSchema, dropSchema, Session
 
 
