@@ -1,3 +1,4 @@
 [submodule "red"]
 	path = red
 	url = https://github.com/rasmusprentow/red.git
+    branch = scorekeeper
