@@ -18,7 +18,7 @@ class Creatematch(Activity):
             print("Start Match Button Pressed")
             try:
                 match = self.createMatch()
-                self.switchActivity("match", match)   
+                self.switchActivity("match", data=match)   
             except Exception:
                 self.session.rollback()
                 print(traceback.format_exc())

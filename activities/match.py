@@ -28,7 +28,7 @@ class Match(Activity):
     def end_match(self):
                
         #print ("Ending match and saving the results at time: "+self.match.created_at.strftime("%Y-%m-%d %H:%M:%S"))
-        self.switchActivity("confirmresult", self.match)
+        self.switchActivity("confirmresult", data=self.match)
         
     def team_scored(self, team):
        
