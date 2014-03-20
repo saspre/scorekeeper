@@ -1,5 +1,5 @@
 from red.activity import Activity
-from models import Match, Session, Player, Team, Base, initSchema
+from models.model import Match, Session, Player, Team, Base, initSchema
 
 class Match(Activity):
    
