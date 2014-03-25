@@ -5,9 +5,9 @@ from red.services.base import Service
 import zmq, json, threading
 
 class Rfidinput (Service, threading.Thread):
-"""
-Reads from RFID reader. Currently mocked through keyboard inputs
-"""
+    """
+    Reads from RFID reader. Currently mocked through keyboard inputs
+    """
     # Overrides run, so doesn't wait for messages
     def run(self):
         try:
