@@ -31,10 +31,11 @@ class Creatematch(Activity):
         if len(self.playersTeamA) == 0 or len(self.playersTeamB) == 0:
             self.setLayout("error")
             self.invokeLayoutFunction("updateErrorMessage","Atleast two player \n are required")
-            raise Exception("You need to add players to both teams you fool")
+            raise Exception("You need to add players to both teams you fool!")
 
         teamA = Team.createOrLoad(self.playersTeamA,self.session)
         teamB = Team.createOrLoad(self.playersTeamB,self.session)
+
         
         #Create Match
         match = Match(team_a = teamA, team_b = teamB, score_a = 0, score_b = 0)
