@@ -136,5 +136,15 @@ class ModelsTest(unittest.TestCase):
         teamB = Team.createOrLoad([player3,player4],self.session)
         self.assertNotEqual(teamA,teamB)
 
+
+    def test_team_createOrLoad_players_empty(self):
+        #run
+        self.assertRaises(Exception, Team.createOrLoad,([],self.session))
+        
+    def test_team_createOrLoad_players_empty(self):
+        #run
+        self.assertRaises(Exception, Team.createOrLoad,(None,self.session))
+        
+
 if __name__ == '__main__':
     unittest.main()

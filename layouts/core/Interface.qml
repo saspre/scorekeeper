@@ -14,6 +14,10 @@ Rectangle {
         return (root.width / 2) - item.width / 2
     }
 
+    function getCenterY(item) {
+        return (root.height / 2) - item.height / 2
+    }
+
     property int margin: 10
 
 }
