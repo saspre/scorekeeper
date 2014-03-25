@@ -3,7 +3,7 @@ import QtQuick 1.1
 import "core" as Core 
 
 Core.Interface {
-    id: match
+    id: confirm_rectangle
     width: 480
     height: 272
 
@@ -12,10 +12,10 @@ Core.Interface {
         match_result.text = result 
     }
 
-    Core.BaseText {
+    Core.ScoreText {
         id: match_result
         width: parent.width
-        x: match.getCenterX(match_result)
+        x: confirm_rectangle.getCenterX(match_result)
         y: 30
 
     }

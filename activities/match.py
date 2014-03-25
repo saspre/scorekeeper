@@ -49,10 +49,7 @@ class Match(Activity):
 
 
     def updateLayout(self):
-
-
         self.invokeLayoutFunction("updateScoreA",self.match.score_a)
-    
         self.invokeLayoutFunction("updateScoreB",self.match.score_b)
             
 
