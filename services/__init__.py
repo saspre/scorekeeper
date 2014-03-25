@@ -1,4 +1,3 @@
-#__init__
 
 
 import os
