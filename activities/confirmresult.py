@@ -8,7 +8,7 @@ class Confirmresult (Activity):
         """ onCreate"""
         self.setLayout("confirm")
         self.match = data
-        self.updateMatchResult
+        
 
     def receiveDisplayMessage(self,message):
         if message["head"] == "button_clicked":          
