@@ -22,3 +22,7 @@ class Mainmenu(Activity):
                 self.switchActivity("serial")
         else:
             self.logger.critical("We " + __file__ +" received something (message), but we are unsure what it is")
+
+    def receiveRfidinputMessage(self,message):
+        if message["head"]=="player_rfid":
+            self.switchActivity("creatematch",[message["data"]]) #it expects a list of rfids
