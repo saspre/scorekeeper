@@ -33,7 +33,7 @@ class Creatematch(Activity):
         if len(self.teamARfid) == 0 or len(self.teamBRfid) == 0:
             self.setLayout("error")
             self.invokeLayoutFunction("updateErrorMessage","Atleast two player \n are required")
-            return 
+            raise Exception("You need to add players you fool!")
             
         #Add new players to DB and add to team lists
         for rfid in self.teamARfid:
@@ -57,10 +57,12 @@ class Creatematch(Activity):
             
             
     def loadPlayer(self,playerRfid):
-        if(len(self.teamBRfid) < len(self.teamARfid)):
-            self.teamBRfid.append(playerRfid)
-        else:
-            self.teamARfid.append(playerRfid)
+        if playerRfid not in self.teamARfid and playerRfid not in self.teamBRfid:
+            if(len(self.teamBRfid) < len(self.teamARfid)):
+                self.teamBRfid.append(playerRfid)
+            else:
+                self.teamARfid.append(playerRfid)
+        self.setLayout("match_setup")
         self.updateLayout()
 
     def updateLayout(self):

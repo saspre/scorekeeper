@@ -13,6 +13,6 @@ class Creatematch(Activity):
   
     def receiveRfidinputMessage(self,message):
         if message["head"]=="player_rfid":
-            self.loadPlayer(message["data"])
+            self.invoce)
             
   
