@@ -11,7 +11,7 @@ import traceback
 
 Base = declarative_base()
 engine = create_engine(config.Config.get("database","connectionstring"),echo=False)
-Session = sessionmaker(bind=engine)
+#Session = sessionmaker(bind=engine)
 
 #################################################################################################################
 ################################## Table used to connect players and to teams ###################################
