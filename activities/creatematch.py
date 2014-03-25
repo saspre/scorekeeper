@@ -13,7 +13,7 @@ class Creatematch(Activity):
         if data != None and len(data) > 0:
             for rfid in data:
                 self.loadPlayer(rfid)
-        self.send("rfidinput",{"head":'get_tag'})
+        self.send("lpc",{"head":'get_tag'})
     
 
     def receiveDisplayMessage(self, message):
@@ -35,7 +35,7 @@ class Creatematch(Activity):
     def createMatch(self):
         if len(self.playersTeamA) == 0 or len(self.playersTeamB) == 0:
             self.setLayout("error")
-            self.invokeLayoutFunction("updateErrorMessage","At least two players \n are required")
+            self.invokeLayoutFunction("updateErrorMessage","At least two players")
             raise Exception("You need to add players to both teams you fool!")
 
         teamA = Team.createOrLoad(self.playersTeamA,self.session)
@@ -54,14 +54,21 @@ class Creatematch(Activity):
             
             
     def loadPlayer(self,playerRfid):
-        player = Player.createOrLoad(playerRfid,self.session)
+        if len(self.playersTeamA) + len(self.playersTeamB) >= 8:
+            self.setLayout("error")
+            self.invokeLayoutFunction("updateErrorMessage","Max 8 players")
+            self.send("lpc",{"head":'get_tag'})
+            return
+
+
+        player = Player.createOrLoad(playerRfid, self.session)
         if player not in self.playersTeamA and player not in self.playersTeamB:
             if(len(self.playersTeamB) < len(self.playersTeamA)):
                 self.playersTeamB.append(player)
             else:
                 self.playersTeamA.append(player)
         
-        self.send("lpc",{"head":'get_rfid'})
+        self.send("lpc",{"head":'get_tag'})
         self.setLayout("match_setup")
         self.updateLayout()
 

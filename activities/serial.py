@@ -6,12 +6,12 @@ class Serial(Activity):
     
     def onCreate(self, data=None):
         self.setLayout("serial")
-        self.send("rfidinput",{"head":'get_rfid'})
+        self.send("lpc",{"head":'get_tag'})
         
     def receiveLpcMessage(self, message):
         if message["head"]=="tag":
             self.invokeLayoutFunction("updateSerial",message["data"])
-            self.send("rfidinput",{"head":'get_rfid'})
+            self.send("lpc",{"head":'get_tag'})
             
     def receiveDisplayMessage(self, message):
         if message["head"]=="button_clicked" and message["data"] == "okay":
