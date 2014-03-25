@@ -32,7 +32,7 @@ class Creatematch(Activity):
 
         if len(self.teamARfid) == 0 or len(self.teamBRfid) == 0:
             self.setLayout("error")
-            self.invokeLayoutFunction("updateErrorMessage","Atleast two player \n are required")
+            self.invokeLayoutFunction("updateErrorMessage", "Atleast two player \n are required")
             raise Exception("You need to add players you fool!")
             
         #Add new players to DB and add to team lists
