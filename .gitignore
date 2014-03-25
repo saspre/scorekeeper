@@ -41,3 +41,6 @@ buttons
 *.autosave
 database.db
 database.db-journal
+
+#settings folders
+.settings/*
