@@ -10,6 +10,7 @@ class Mainmenu(Activity):
     def onCreate(self, data=None):
         """ onCreate"""
         self.setLayout("mainmenu")
+        self.send("rfidinput",{"head":'get_rfid'})
        
     def receiveDisplayMessage(self, message):
 
@@ -25,5 +26,6 @@ class Mainmenu(Activity):
         else:
             self.logger.critical("We " + __file__ +" received something (message), but we are unsure what it is. It Was: " + str(message))
 
-    def receiveLpcMessage(self, message):
-        print message
+    def receiveRfidinputMessage(self,message):
+        if message["head"]=="tag":
+            self.switchActivity("creatematch",[message["data"]]) #it expects a list of rfids
