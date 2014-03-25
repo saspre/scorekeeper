@@ -10,16 +10,13 @@ class Match(Activity):
      
 
     def receiveDisplayMessage(self,message):
-        print message
         if message["head"] == "button_clicked":          
             if message["data"] == "a_scored":
                 self.team_scored("a");
             elif message["data"] == "b_scored":
                 self.team_scored("b");
             elif message["data"] == "end_match":
-                self.end_match();
-          
-        
+                self.end_match()
         else:
             print("We (match) received something (message), but we are unsure what it is")
       
