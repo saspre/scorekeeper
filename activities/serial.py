@@ -9,8 +9,8 @@ class Serial(Activity):
         self.teamBRfid = []
         self.setLayout("serial")
         
-    def receiveRfidinputMessage(self, message):
-        if message["head"]=="player_rfid":
+    def receiveLpcMessage(self, message):
+        if message["head"]=="tag":
             self.invokeLayoutFunction("updateSerial",message["data"])
             
     def receiveDisplayMessage(self, message):

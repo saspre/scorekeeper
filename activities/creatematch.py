@@ -8,7 +8,7 @@ class Creatematch(Activity):
     def onCreate(self,data):
         self.playersTeamA = []
         self.playersTeamB = []
-        self.send("rfidinput",{"head":'get_rfid'})
+        self.send("lpc",{"head":'get_tag'})
         
 
     def receiveDisplayMessage(self, message):
@@ -43,8 +43,8 @@ class Creatematch(Activity):
         return match
 
         
-    def receiveRfidinputMessage(self,message):
-        if message["head"]=="player_rfid":
+    def receiveLpcMessage(self,message):
+        if message["head"]=="tag":
             self.loadPlayer(message["data"])
             
             
@@ -55,7 +55,7 @@ class Creatematch(Activity):
                 self.playersTeamB.append(player)
             else:
                 self.playersTeamA.append(player)
-        self.send("rfidinput",{"head":'get_rfid'})
+        self.send("lpc",{"head":'get_rfid'})
         self.setLayout("match_setup")
         self.updateLayout()
 
