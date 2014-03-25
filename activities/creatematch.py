@@ -8,10 +8,10 @@ class Creatematch(Activity):
     def onCreate(self,data):
         self.playersTeamA = []
         self.playersTeamB = []
-        if data != None and len(data) > 0
+        self.setLayout("match_setup")
+        if data != None and len(data) > 0:
             for rfid in data:
                 self.loadPlayer(rfid)
-        self.setLayout("match_setup")
         self.send("rfidinput",{"head":'get_rfid'})
         
 

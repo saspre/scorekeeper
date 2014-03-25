@@ -10,6 +10,7 @@ class Mainmenu(Activity):
     def onCreate(self, data=None):
         """ onCreate"""
         self.setLayout("mainmenu")
+        self.send("rfidinput",{"head":'get_rfid'})
        
     def receiveDisplayMessage(self, message):
         """ Receives stuff """

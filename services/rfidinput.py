@@ -10,7 +10,6 @@ class Rfidinput (Service, threading.Thread):
     """
 
     def processMessage(self, message):
-        print(message)
         if(message['head'] == "get_rfid"):
             self.getRfid()
         else:
@@ -19,7 +18,6 @@ class Rfidinput (Service, threading.Thread):
     def getRfid(self):
         try:
             rin = input("")
-            print (rin)
             #TODO: Check for correct input syntax
             self.send({"head":"player_rfid","data":rin})
         except zmq.error.ContextTerminated:
