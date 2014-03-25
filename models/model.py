@@ -11,7 +11,6 @@ import traceback
 
 Base = declarative_base()
 engine = create_engine(config.Config.get("database","connectionstring"),echo=False)
-#Session = sessionmaker(bind=engine)
 
 #################################################################################################################
 ################################## Table used to connect players and to teams ###################################
@@ -106,6 +105,7 @@ def dropSchema():
     Base.metadata.drop_all(engine)
 
 def initData():
+    Session = sessionmaker(bind=engine)
     session = Session()
 
     try:

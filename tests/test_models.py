@@ -2,8 +2,9 @@
 import unittest
 import config
 config.initConfig('config/test_conf.conf') # must be called before importing models to ensure memory based db
-from models.model import Player, Match, Team, initSchema, dropSchema, Session
+from models.model import Player, Match, Team, initSchema, dropSchema, sessionmaker, engine
 
+Session = sessionmaker(bind=engine)
 
 
 class ModelsTest(unittest.TestCase):
