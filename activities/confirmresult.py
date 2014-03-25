@@ -5,8 +5,10 @@ from red.activity import Activity
 class Confirmresult (Activity):
 
     def onCreate(self, data=None):
+        """ onCreate"""
         self.setLayout("confirm")
         self.match = data
+        self.updateMatchResult
 
     def receiveDisplayMessage(self,message):
         if message["head"] == "button_clicked":          
@@ -16,7 +18,7 @@ class Confirmresult (Activity):
                 self.switchActivity("match", data=self.match)
         
         else:
-            print("We " + __file__ +" received something (message), but we are unsure what it is")
+            self.logger.critical("We " + __file__ +" received something (message), but we are unsure what it is")
       
     def saveMatch(self):
         self.session.commit()
