@@ -77,9 +77,12 @@ class Team(Base):
     def createOrLoad(players,session):
         teams = []
         resultTeam = None
+        if players == None or len(players) < 1:
+            raise Exception("Atleast one player is needed")
         for player in players:
             teams.append(player.teams)
-             
+        
+
         intersectList = reduce(lambda xs,ys: filter(lambda x : x in xs,ys),teams)
         for team in intersectList:
             #team exists, set as local team

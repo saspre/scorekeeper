@@ -3,7 +3,7 @@ import QtQuick 1.1
 import "core" as Core 
 
 Core.Interface {
-    id: confirm_rectangle
+    id: page
     width: 480
     height: 272
 
@@ -13,10 +13,18 @@ Core.Interface {
     }
 
     Core.ScoreText {
+        id: match_result_header
+        x: page.getCenterX(match_result_header)
+        y: page.margin
+        text: qsTr("Match ended: ")
+
+    }
+
+    Core.ScoreText {
         id: match_result
-        width: parent.width
-        x: confirm_rectangle.getCenterX(match_result)
-        y: 30
+        x: page.getCenterX(match_result)
+        y: 90
+        text: qsTr("0 - 0")
 
     }
    

@@ -22,4 +22,5 @@ class Confirmresult (Activity):
       
     def saveMatch(self):
         self.session.commit()
-        self.switchActivity("creatematch", data=self.match)
+        self.switchActivity("mainmenu")
+        
