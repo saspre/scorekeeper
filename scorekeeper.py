@@ -6,5 +6,3 @@ from models.model import initSchema
 
 initSchema()
 Red().start()
-
-
