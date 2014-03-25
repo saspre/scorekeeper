@@ -1,6 +1,6 @@
 from red.activity import Activity
 import traceback
-from models import Match, Session, Player, Team, Base, initSchema
+from models.model import Match, Session, Player, Team, Base, initSchema
 
 class Creatematch(Activity):
     
