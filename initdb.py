@@ -1,5 +1,5 @@
 #!/usr/bin/python2
-from models import initSchema,initData
+from models.model import initSchema,initData
 
 
 initSchema()

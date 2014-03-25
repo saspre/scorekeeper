@@ -108,8 +108,7 @@ def dropSchema():
     Base.metadata.drop_all(engine)
 
 def initData():
-    Session = sessionmaker(bind=engine)
-    session = Session()
+    session = sessionmaker(bind=engine)()
 
     try:
         p = [ \

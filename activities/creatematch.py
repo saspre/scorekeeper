@@ -4,10 +4,11 @@ from models.model import Match, Player, Team, Base, initSchema
 
 class Creatematch(Activity):
     
-    def onCreate(self, data=None):
-        self.teamARfid = []
-        self.teamBRfid = []
-        self.setLayout("match_setup")
+
+    def onCreate(self,data):
+        self.playersTeamA = []
+        self.playersTeamB = []
+        self.send("rfidinput",{"head":'get_rfid'})
         
 
     def receiveDisplayMessage(self, message):
@@ -27,26 +28,17 @@ class Creatematch(Activity):
 
             
     def createMatch(self):
-        teamAPlayers = []
-        teamBPlayers = []
-
-        if len(self.teamARfid) == 0 or len(self.teamBRfid) == 0:
+        if len(self.playersTeamA) == 0 or len(self.playersTeamB) == 0:
             self.setLayout("error")
-            self.invokeLayoutFunction("updateErrorMessage", "Atleast two player \n are required")
-            raise Exception("You need to add players you fool!")
-            
-        #Add new players to DB and add to team lists
-        for rfid in self.teamARfid:
-            teamAPlayers.append(Player.createOrLoad(rfid, self.session))
-        
-        for rfid in self.teamBRfid:
-            teamBPlayers.append(Player.createOrLoad(rfid, self.session))
-        
-        teamA = Team.createOrLoad(teamAPlayers, self.session)
-        teamB = Team.createOrLoad(teamBPlayers, self.session)
+            self.invokeLayoutFunction("updateErrorMessage","Atleast two player \n are required")
+            raise Exception("You need to add players to both teams you fool!")
+
+        teamA = Team.createOrLoad(self.playersTeamA,self.session)
+        teamB = Team.createOrLoad(self.playersTeamB,self.session)
+
         
         #Create Match
-        match = Match(team_a=teamA, team_b=teamB, score_a=0, score_b=0)
+        match = Match(team_a = teamA, team_b = teamB, score_a = 0, score_b = 0)
    
         return match
 
@@ -57,16 +49,20 @@ class Creatematch(Activity):
             
             
     def loadPlayer(self,playerRfid):
-        if playerRfid not in self.teamARfid and playerRfid not in self.teamBRfid:
-            if(len(self.teamBRfid) < len(self.teamARfid)):
-                self.teamBRfid.append(playerRfid)
+        player = Player.createOrLoad(playerRfid,self.session)
+        if player not in self.playersTeamA and player not in self.playersTeamB:
+            if(len(self.playersTeamB) < len(self.playersTeamA)):
+                self.playersTeamB.append(player)
             else:
-                self.teamARfid.append(playerRfid)
+                self.playersTeamA.append(player)
+        self.send("rfidinput",{"head":'get_rfid'})
         self.setLayout("match_setup")
         self.updateLayout()
 
     def updateLayout(self):
-        self.send("display", {"head":"call_func","data":{"func":"updateTeamB","param":"\n".join(self.teamBRfid)}})
-        self.send("display", {"head":"call_func","data":{"func":"updateTeamA","param":"\n".join(self.teamARfid)}})
+        if len(self.playersTeamA) > 0:
+            self.send("display",{"head":"call_func","data":{"func":"updateTeamA","param":reduce(lambda x,y: x+"\n"+y,map(lambda player:player.name,self.playersTeamA))}})
+        if len(self.playersTeamB) > 0:
+            self.send("display",{"head":"call_func","data":{"func":"updateTeamB","param":reduce(lambda x,y: x+"\n"+y,map(lambda player:player.name,self.playersTeamB))}})
         
         
